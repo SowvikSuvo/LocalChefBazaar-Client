@@ -1,29 +1,26 @@
-import { BsFingerprint } from "react-icons/bs";
-import { GrUserAdmin } from "react-icons/gr";
+import { RiShoppingBasket2Line } from "react-icons/ri";
+import { RiChatCheckLine } from "react-icons/ri";
+import { AiOutlineHeart } from "react-icons/ai";
 import MenuItem from "./MenuItem";
-import { useState } from "react";
-import BecomeSellerModal from "../../../Modal/BecomeSellerModal";
+
 const CustomerMenu = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
   return (
     <>
-      <MenuItem icon={BsFingerprint} label="My Orders" address="my-orders" />
-
-      <div
-        onClick={() => setIsOpen(true)}
-        className="flex items-center px-4 py-2 mt-5  transition-colors duration-300 transform text-gray-600  hover:bg-gray-300   hover:text-gray-700 cursor-pointer"
-      >
-        <GrUserAdmin className="w-5 h-5" />
-
-        <span className="mx-4 font-medium">Become A Seller</span>
-      </div>
-
-      <BecomeSellerModal closeModal={closeModal} isOpen={isOpen} />
+      <MenuItem
+        icon={RiShoppingBasket2Line}
+        label="My Orders"
+        address="/dashboard/my-orders"
+      />
+      <MenuItem
+        icon={RiChatCheckLine}
+        label="My Review"
+        address="/dashboard/my-review"
+      />
+      <MenuItem
+        icon={AiOutlineHeart}
+        label="Favorite Meal"
+        address="/dashboard/favorite-meal"
+      />
     </>
   );
 };

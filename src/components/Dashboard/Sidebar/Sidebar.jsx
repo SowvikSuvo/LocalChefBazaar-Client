@@ -11,7 +11,7 @@ import { BsGraphUp } from "react-icons/bs";
 // User Menu
 import MenuItem from "./Menu/MenuItem";
 import AdminMenu from "./Menu/AdminMenu";
-import SellerMenu from "./Menu/SellerMenu";
+import ChefMenu from "./Menu/ChefMenu";
 import CustomerMenu from "./Menu/CustomerMenu";
 
 const Sidebar = () => {
@@ -64,15 +64,9 @@ const Sidebar = () => {
           <div className="flex flex-col justify-between flex-1 mt-6">
             {/*  Menu Items */}
             <nav>
-              {/* Common Menu */}
-              <MenuItem
-                icon={BsGraphUp}
-                label="Statistics"
-                address="/dashboard"
-              />
               {/* Role-Based Menu */}
               <CustomerMenu />
-              <SellerMenu />
+              <ChefMenu />
               <AdminMenu />
             </nav>
           </div>
