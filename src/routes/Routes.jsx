@@ -21,6 +21,7 @@ import ManageRequest from "../pages/Dashboard/Admin/ManageRequest";
 import Meals from "../pages/Home/Meals";
 import MealsDetails from "../pages/MealsDetails/MealsDetails";
 import OrderPage from "../components/Modal/OrderModal";
+import PaymentSuccess from "../pages/Payment/PaymentSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +50,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <OrderPage></OrderPage>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "payment-success",
+        element: (
+          <PrivateRoute>
+            <PaymentSuccess></PaymentSuccess>
           </PrivateRoute>
         ),
       },

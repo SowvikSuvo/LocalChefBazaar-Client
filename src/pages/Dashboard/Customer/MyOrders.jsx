@@ -18,6 +18,27 @@ const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const handlePayment = async (order) => {
+    try {
+      const paymentInfo = {
+        order,
+        userEmail: user?.email,
+      };
+
+      const result = await axiosSecure.post(
+        "/create-checkout-session",
+        paymentInfo
+      );
+
+      if (result.data?.url) {
+        window.location.href = result.data.url;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    console.log("Processing payment for order:", order);
+  };
+
   useEffect(() => {
     if (!user?.email) return;
 
@@ -111,6 +132,7 @@ const MyOrders = () => {
             </div>
 
             <button
+              onClick={() => handlePayment(order)}
               className={`mt-6 w-full py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition duration-300`}
             >
               Pay Now
