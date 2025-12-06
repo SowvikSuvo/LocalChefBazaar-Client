@@ -11,9 +11,11 @@ import {
   User,
   MapPin,
 } from "lucide-react";
+import { useNavigate } from "react-router";
 
 const OrderModal = ({ isOpen, closeModal, meal }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
 
   const [quantity, setQuantity] = useState(1);
@@ -30,7 +32,7 @@ const OrderModal = ({ isOpen, closeModal, meal }) => {
     const totalPrice = meal.price * quantity;
 
     Swal.fire({
-      title: `Total Price: ${totalPrice} TK`,
+      title: `Total Price: $${totalPrice} USD`,
       text: "Want to confirm this order?",
       icon: "question",
       showCancelButton: true,
@@ -56,6 +58,7 @@ const OrderModal = ({ isOpen, closeModal, meal }) => {
           .post("/orders", orderData)
           .then(() => {
             Swal.fire("Successfully Ordered!", "", "success");
+            navigate("/dashboard/my-orders");
             closeModal();
           })
           .catch((err) => {
@@ -103,7 +106,7 @@ const OrderModal = ({ isOpen, closeModal, meal }) => {
           {/* Price */}
           <div>
             <label className="font-semibold text-gray-700 flex items-center gap-2">
-              <BadgeDollarSign size={18} /> Price (TK)
+              <BadgeDollarSign size={18} /> Price (USD)
             </label>
             <input
               value={meal.price}

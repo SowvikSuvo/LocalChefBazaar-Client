@@ -13,6 +13,7 @@ import MenuItem from "./Menu/MenuItem";
 import AdminMenu from "./Menu/AdminMenu";
 import ChefMenu from "./Menu/ChefMenu";
 import CustomerMenu from "./Menu/CustomerMenu";
+import { FaHome } from "react-icons/fa";
 
 const Sidebar = () => {
   const { logOut } = useAuth();
@@ -65,6 +66,14 @@ const Sidebar = () => {
             {/*  Menu Items */}
             <nav>
               {/* Role-Based Menu */}
+              <Link
+                to="/"
+                className="flex items-center px-4 py-2 mt-5 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform rounded-lg"
+              >
+                <span className="flex items-center gap-5 font-semibold">
+                  <FaHome></FaHome> Home Page
+                </span>
+              </Link>
               <CustomerMenu />
               <ChefMenu />
               <AdminMenu />

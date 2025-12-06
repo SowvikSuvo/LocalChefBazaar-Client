@@ -18,26 +18,37 @@ const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Handle payment
   const handlePayment = async (order) => {
-    try {
-      const paymentInfo = {
-        order,
-        userEmail: user?.email,
-      };
+    console.log("Button clicked for order:", order._id);
 
+    try {
+      const paymentInfo = { order, userEmail: user?.email };
       const result = await axiosSecure.post(
         "/create-checkout-session",
         paymentInfo
       );
 
+      console.log("Checkout session result:", result.data);
+
       if (result.data?.url) {
         window.location.href = result.data.url;
+      } else {
+        alert("No checkout URL returned!");
       }
     } catch (error) {
-      console.error(error);
+      console.error("Payment error:", error);
     }
-    console.log("Processing payment for order:", order);
   };
+
+  // Update only the specific order to "paid" locally after payment success
+  // const markOrderPaid = (orderId) => {
+  //   setOrders((prevOrders) =>
+  //     prevOrders.map((o) =>
+  //       o._id === orderId ? { ...o, paymentStatus: "paid" } : o
+  //     )
+  //   );
+  // };
 
   useEffect(() => {
     if (!user?.email) return;
@@ -64,6 +75,7 @@ const MyOrders = () => {
         Loading...
       </div>
     );
+
   if (!orders.length)
     return (
       <div className="text-center mt-10 text-lg md:text-xl font-medium text-gray-700">
@@ -84,10 +96,10 @@ const MyOrders = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="bg-white shadow-lg rounded-3xl p-6 border border-gray-200 hover:shadow-2xl transition-shadow relative flex flex-col justify-between"
+            className="bg-white shadow-lg rounded-3xl p-6 border border-gray-200 hover:shadow-2xl transition-shadow flex flex-col justify-between"
           >
             <div>
-              <h3 className="text-2xl md:text-2xl font-semibold text-orange-600 mb-5 truncate">
+              <h3 className="text-2xl font-semibold text-orange-600 mb-5 truncate">
                 {order.mealName}
               </h3>
 
@@ -113,29 +125,37 @@ const MyOrders = () => {
                 </p>
                 <p className="flex items-center gap-2">
                   <Hash size={16} />{" "}
-                  <span className="font-semibold">Chef ID:</span>{" "}
-                  <span className="text-gray-500 text-xs md:text-sm">
-                    {order.chefId}
-                  </span>
+                  <span className="font-semibold">Chef ID:</span> {order.chefId}
                 </p>
                 <p className="flex items-center gap-2">
                   <CircleCheck size={18} />{" "}
-                  <span className="font-semibold ">Order Status:</span>{" "}
-                  <span className="text-yellow-500">{order.orderStatus}</span>
+                  <span className="font-semibold">Order Status:</span>{" "}
+                  {order.orderStatus}
                 </p>
-                <p className="flex items-center gap-2 ">
+                <p className="flex items-center gap-2">
                   <CreditCard size={18} />{" "}
-                  <span className="font-semibold ">Payment Status:</span>{" "}
-                  <span className="text-yellow-500">{order.paymentStatus}</span>
+                  <span className="font-semibold">Payment Status:</span>{" "}
+                  {order.paymentStatus}
                 </p>
               </div>
             </div>
 
+            {/* Conditional Pay / Paid button */}
+
             <button
-              onClick={() => handlePayment(order)}
-              className={`mt-6 w-full py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition duration-300`}
+              onClick={
+                order.paymentStatus?.toLowerCase().trim() === "pending"
+                  ? () => handlePayment(order)
+                  : undefined
+              }
+              disabled={order.paymentStatus === "paid"}
+              className={`mt-6 w-full py-3 rounded-xl font-semibold text-white ${
+                order.paymentStatus === "paid"
+                  ? "bg-green-500 cursor-not-allowed"
+                  : "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition duration-300"
+              }`}
             >
-              Pay Now
+              {order.paymentStatus === "paid" ? "Paid" : "Pay Now"}
             </button>
           </motion.div>
         ))}
