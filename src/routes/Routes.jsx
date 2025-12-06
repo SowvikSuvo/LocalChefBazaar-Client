@@ -20,6 +20,7 @@ import MyMeals from "../pages/Dashboard/Chef/MyMeals";
 import ManageRequest from "../pages/Dashboard/Admin/ManageRequest";
 import Meals from "../pages/Home/Meals";
 import MealsDetails from "../pages/MealsDetails/MealsDetails";
+import OrderPage from "../components/Modal/OrderModal";
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +44,14 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      {
+        path: "/order/:id",
+        element: (
+          <PrivateRoute>
+            <OrderPage></OrderPage>
+          </PrivateRoute>
+        ),
+      },
     ],
   },
   { path: "/login", element: <Login /> },
@@ -55,14 +64,14 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      // {
-      //   index: true,
-      //   element: (
-      //     <PrivateRoute>
-      //       <Statistics />
-      //     </PrivateRoute>
-      //   ),
-      // },
+      {
+        index: true,
+        element: (
+          <PrivateRoute>
+            <Profile></Profile>
+          </PrivateRoute>
+        ),
+      },
       {
         path: "statistics",
         element: (
@@ -103,14 +112,7 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-      {
-        path: "profile",
-        element: (
-          <PrivateRoute>
-            <Profile />
-          </PrivateRoute>
-        ),
-      },
+
       {
         path: "my-orders",
         element: (

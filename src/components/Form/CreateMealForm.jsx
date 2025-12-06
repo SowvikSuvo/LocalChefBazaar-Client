@@ -14,6 +14,8 @@ const CreateMealFrom = () => {
   const axiosSecure = useAxiosSecure();
   const [imageFile, setImageFile] = useState(null);
 
+  const shortChefId = `chef_${user?.uid.slice(0, 6)}`;
+
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       foodName: "",
@@ -24,7 +26,7 @@ const CreateMealFrom = () => {
       estimatedDeliveryTime: "",
       chefExperience: "",
       userEmail: user?.email || "",
-      chefId: user?.uid,
+      chefId: shortChefId,
       deliveryArea: "",
     },
   });

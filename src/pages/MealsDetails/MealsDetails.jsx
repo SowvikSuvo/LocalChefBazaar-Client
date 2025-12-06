@@ -12,8 +12,8 @@ import {
   Clock,
   ClipboardList,
 } from "lucide-react";
-import Button from "../../components/Shared/Button/Button";
-import PurchaseModal from "../../components/Modal/PurchaseModal";
+
+import OrderModal from "../../components/Modal/OrderModal";
 import MealsDetailsWithReviews from "./MealsDetailsWithReviews";
 
 const MealsDetails = () => {
@@ -21,6 +21,7 @@ const MealsDetails = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const navigate = useNavigate();
+
   const [meal, setMeal] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -58,18 +59,17 @@ const MealsDetails = () => {
         transition={{ duration: 0.5 }}
         className="flex flex-col lg:flex-row gap-10 py-10"
       >
-        {/* LEFT: IMAGE */}{" "}
+        {/* IMAGE */}
         <div className="flex-1 rounded-xl overflow-hidden shadow-lg border border-orange-200">
-          {" "}
           <img
             src={meal.foodImage}
             alt={meal.foodName}
-            className="w-full h-96 object-cover rounded-xl "
-          />{" "}
+            className="w-full h-96 object-cover rounded-xl"
+          />
         </div>
-        {/* RIGHT: DETAILS */}
+
+        {/* DETAILS */}
         <div className="flex-1 flex flex-col gap-6">
-          {/* FOOD NAME */}
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -78,7 +78,7 @@ const MealsDetails = () => {
             {meal.foodName}
           </motion.h1>
 
-          {/* CHEF NAME & ID */}
+          {/* CHEF */}
           <div className="flex items-center gap-4 text-gray-700 font-medium">
             <ChefHat className="text-orange-600" size={24} />
             <span>{meal.chefName}</span>
@@ -88,24 +88,26 @@ const MealsDetails = () => {
             </span>
           </div>
 
-          {/* PRICE & RATING */}
+          {/* PRICE + RATING */}
           <div className="flex items-center gap-6 mt-4">
             <div className="flex items-center gap-2 text-orange-700 font-bold text-xl">
               <DollarSign size={21} />
               {meal.price}
             </div>
+
             <div className="flex items-center gap-2 text-yellow-500 font-semibold">
               <Star size={22} fill="gold" /> {meal.rating}
             </div>
           </div>
 
-          {/* DELIVERY & TIME */}
+          {/* DELIVERY */}
           <div className="flex-col items-center gap-6 mt-4 text-gray-700">
             <div className="flex items-center gap-2 mb-5">
               <MapPin size={18} className="text-orange-600" />
               <p className="text-orange-600">Delivery Area:</p>
               {meal.deliveryArea}
             </div>
+
             <div className="flex items-center gap-2 mt-2">
               <Clock size={18} className="text-orange-600" />
               <p className="text-orange-600">Estimated Time:</p>
@@ -133,15 +135,22 @@ const MealsDetails = () => {
             <p className="text-gray-600">{meal.chefExperience}</p>
           </div>
 
-          {/* ORDER BUTTON */}
-          <motion.div whileHover={{ scale: 1.03 }} className="mt-8">
-            <Button onClick={() => setIsOpen(true)} label="Order Now" />
-          </motion.div>
-
-          <PurchaseModal closeModal={closeModal} isOpen={isOpen} />
+          {/* ORDER BUTTON (MODAL) */}
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            className="mt-8 w-full bg-orange-500 text-white py-3 rounded-lg"
+            onClick={() => setIsOpen(true)}
+          >
+            Order Now
+          </motion.button>
         </div>
       </motion.div>
-      <MealsDetailsWithReviews></MealsDetailsWithReviews>
+
+      {/* REVIEWS */}
+      <MealsDetailsWithReviews />
+
+      {/* ORDER MODAL */}
+      <OrderModal isOpen={isOpen} closeModal={closeModal} meal={meal} />
     </Container>
   );
 };
