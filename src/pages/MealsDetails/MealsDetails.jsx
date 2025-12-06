@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Button from "../../components/Shared/Button/Button";
 import PurchaseModal from "../../components/Modal/PurchaseModal";
+import MealsDetailsWithReviews from "./MealsDetailsWithReviews";
 
 const MealsDetails = () => {
   const { id } = useParams();
@@ -140,6 +141,7 @@ const MealsDetails = () => {
           <PurchaseModal closeModal={closeModal} isOpen={isOpen} />
         </div>
       </motion.div>
+      <MealsDetailsWithReviews></MealsDetailsWithReviews>
     </Container>
   );
 };

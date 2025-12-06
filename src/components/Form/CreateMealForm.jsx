@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import { Navigate, useNavigate } from "react-router";
 
 const CreateMealFrom = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const [imageFile, setImageFile] = useState(null);
 
@@ -44,6 +46,7 @@ const CreateMealFrom = () => {
 
       const mealData = {
         ...data,
+        price: Number(data.price),
         foodImage: imgURL,
         ingredients: data.ingredients.split(",").map((i) => i.trim()),
         rating: Math.min(data.rating, 5),
@@ -53,12 +56,19 @@ const CreateMealFrom = () => {
       console.log(mealData);
 
       await axiosSecure.post("/create-meals", mealData);
-      toast.success("Meal created successfully!");
+      // toast.success("Meal created successfully!");
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Meal created successfully!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      navigate("/meals");
       reset();
       setImageFile(null);
     } catch (err) {
       console.error(err);
-      toast.error("Error creating meal");
     }
   };
 
@@ -236,7 +246,6 @@ const CreateMealFrom = () => {
             Create Meal
           </motion.button>
         </form>
-        <ToastContainer />
       </motion.div>
     </div>
   );

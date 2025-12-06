@@ -2,7 +2,7 @@ import Home from "../pages/Home/Home";
 import ErrorPage from "../pages/ErrorPage";
 import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
-import PlantDetails from "../pages/PlantDetails/MealsDetails";
+import PlantDetails from "../pages/MealsDetails/MealsDetails";
 import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
 import CreateMeal from "../pages/Dashboard/Chef/CreateMeal";
@@ -19,7 +19,7 @@ import FavoriteMeal from "../pages/Dashboard/Customer/FavoriteMeal";
 import MyMeals from "../pages/Dashboard/Chef/MyMeals";
 import ManageRequest from "../pages/Dashboard/Admin/ManageRequest";
 import Meals from "../pages/Home/Meals";
-import MealsDetails from "../pages/PlantDetails/MealsDetails";
+import MealsDetails from "../pages/MealsDetails/MealsDetails";
 
 export const router = createBrowserRouter([
   {
