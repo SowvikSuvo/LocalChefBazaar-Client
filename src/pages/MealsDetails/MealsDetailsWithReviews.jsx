@@ -48,6 +48,8 @@ const MealsDetailsWithReviews = () => {
 
     const reviewData = {
       foodId: id,
+      mealName: meal.foodName,
+      reviewerEmail: user.email,
       reviewerName: user.name || user.displayName || "Anonymous",
       reviewerImage: user.photoURL || "https://i.ibb.co/sample-user.jpg",
       rating: Number(newReview.rating) || 5,
