@@ -4,10 +4,13 @@ import { TbFidgetSpinner } from "react-icons/tb";
 import { toast } from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
 import { motion } from "framer-motion";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const SignUp = () => {
   const { createUser, updateUserProfile, loading } = useAuth();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
   const location = useLocation();
   const from = location.state || "/";
 
@@ -25,18 +28,43 @@ const SignUp = () => {
       imageUrl?.trim() || "https://i.ibb.co/8mN9R6q/default-user.png";
 
     try {
-      await createUser(email, password);
+      const result = await createUser(email, password);
+      if (!result?.user) throw new Error("User creation failed");
+
       await updateUserProfile(name, finalImageUrl);
 
-      toast.success("Registration Successful!");
+      await axiosSecure.post(
+        `/users`,
+        {
+          uid: result.user.uid,
+          name,
+          email,
+          address,
+          image: finalImageUrl,
+          role: "user",
+          status: "active",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Registration Successful!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
       navigate(from, { replace: true });
     } catch (error) {
-      toast.error(error.message);
+      console.error(error);
+      toast.error(error.code || error.message || "Signup failed");
     }
-    console.log(data);
   };
 
-  // Animation Variants
   const fieldVariant = {
     hidden: { opacity: 0, x: -40 },
     visible: (i) => ({
@@ -48,14 +76,12 @@ const SignUp = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-100 to-orange-200 flex justify-center items-center px-4">
-      {/* Card Wrapper Animation */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8, y: 50 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.6, type: "spring" }}
-        className=" max-w-3xl bg-white shadow-xl rounded-2xl p-8 border border-orange-100"
+        className="max-w-3xl bg-white shadow-xl rounded-2xl p-8 border border-orange-100"
       >
-        {/* Header Animation */}
         <motion.h1
           initial={{ opacity: 0, y: -25 }}
           animate={{ opacity: 1, y: 0 }}
@@ -66,7 +92,6 @@ const SignUp = () => {
         </motion.h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          {/* Name */}
           <motion.div
             variants={fieldVariant}
             initial="hidden"
@@ -77,7 +102,7 @@ const SignUp = () => {
             <input
               {...register("name", { required: "Name is required" })}
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg bg-gray-50 
-              focus:ring-2 focus:ring-orange-400 focus:border-orange-500 outline-none transition"
+          focus:ring-2 focus:ring-orange-400 focus:border-orange-500 outline-none transition"
               placeholder="Enter your name"
             />
             {errors.name && (
@@ -85,7 +110,6 @@ const SignUp = () => {
             )}
           </motion.div>
 
-          {/* Address */}
           <motion.div
             variants={fieldVariant}
             initial="hidden"
@@ -96,7 +120,7 @@ const SignUp = () => {
             <input
               {...register("address", { required: "Address is required" })}
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg bg-gray-50 
-              focus:ring-2 focus:ring-orange-400 focus:border-orange-500 outline-none transition"
+          focus:ring-2 focus:ring-orange-400 focus:border-orange-500 outline-none transition"
               placeholder="Enter your address"
             />
             {errors.address && (
@@ -104,7 +128,6 @@ const SignUp = () => {
             )}
           </motion.div>
 
-          {/* Image URL */}
           <motion.div
             variants={fieldVariant}
             initial="hidden"
@@ -115,12 +138,11 @@ const SignUp = () => {
             <input
               {...register("imageUrl")}
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg bg-gray-50 
-              focus:ring-2 focus:ring-orange-400 focus:border-orange-500 outline-none transition"
+          focus:ring-2 focus:ring-orange-400 focus:border-orange-500 outline-none transition"
               placeholder="https://example.com/photo.jpg"
             />
           </motion.div>
 
-          {/* Email */}
           <motion.div
             variants={fieldVariant}
             initial="hidden"
@@ -132,7 +154,7 @@ const SignUp = () => {
               type="email"
               {...register("email", { required: "Email is required" })}
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg bg-gray-50 
-              focus:ring-2 focus:ring-orange-400 focus:border-orange-500 outline-none transition"
+          focus:ring-2 focus:ring-orange-400 focus:border-orange-500 outline-none transition"
               placeholder="Enter your email"
             />
             {errors.email && (
@@ -140,7 +162,6 @@ const SignUp = () => {
             )}
           </motion.div>
 
-          {/* Password */}
           <motion.div
             variants={fieldVariant}
             initial="hidden"
@@ -155,7 +176,7 @@ const SignUp = () => {
                 minLength: { value: 6, message: "Minimum 6 characters" },
               })}
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg bg-gray-50 
-              focus:ring-2 focus:ring-orange-400 focus:border-orange-500 outline-none transition"
+          focus:ring-2 focus:ring-orange-400 focus:border-orange-500 outline-none transition"
               placeholder="*******"
             />
             {errors.password && (
@@ -163,7 +184,6 @@ const SignUp = () => {
             )}
           </motion.div>
 
-          {/* Confirm Password */}
           <motion.div
             variants={fieldVariant}
             initial="hidden"
@@ -179,7 +199,7 @@ const SignUp = () => {
                   value === watch("password") || "Passwords do not match",
               })}
               className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg bg-gray-50 
-              focus:ring-2 focus:ring-orange-400 focus:border-orange-500 outline-none transition"
+          focus:ring-2 focus:ring-orange-400 focus:border-orange-500 outline-none transition"
               placeholder="*******"
             />
             {errors.confirmPassword && (
@@ -189,13 +209,12 @@ const SignUp = () => {
             )}
           </motion.div>
 
-          {/* Submit Button */}
           <motion.button
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             type="submit"
             className="bg-orange-500 text-white w-full rounded-lg py-3 font-semibold text-lg 
-            shadow-lg hover:bg-orange-600 transition"
+        shadow-lg hover:bg-orange-600 transition"
           >
             {loading ? (
               <TbFidgetSpinner className="animate-spin m-auto" />

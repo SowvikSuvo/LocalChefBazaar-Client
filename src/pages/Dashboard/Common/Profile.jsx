@@ -1,18 +1,21 @@
 import { useState, useEffect } from "react";
 import useAuth from "../../../hooks/useAuth";
-import coverImg from "../../../assets/images/cover.jpg";
+import coverImg from "../../../assets/images/banner.jpg";
 import axios from "axios";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 
 const Profile = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
   const [userData, setUserData] = useState(null);
+  console.log("User Data:", userData);
 
-  // Fetch additional user info like address, role, status, chefId
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await axios.get(`/api/users/${user?.uid}`); // replace with your API
+        const res = await axiosSecure.get(`/users/${user?.uid}`);
         setUserData(res.data);
       } catch (err) {
         console.error(err);
@@ -22,14 +25,14 @@ const Profile = () => {
     if (user) {
       fetchUserData();
     }
-  }, [user]);
+  }, [user, axiosSecure]);
 
   const handleRequest = async (requestType) => {
     if (!userData) return;
 
     const requestData = {
       _id: userData._id,
-      userName: userData.displayName,
+      userName: userData.name || user.displayName,
       userEmail: userData.email,
       requestType,
       requestStatus: "pending",
@@ -37,19 +40,24 @@ const Profile = () => {
     };
 
     try {
-      await axios.post("/api/admin/requests", requestData); // send to admin
+      await axiosSecure.post("/admin/requests", requestData);
       Swal.fire(
         "Request Sent!",
         `Your ${requestType} request is pending.`,
         "success"
       );
     } catch (err) {
-      console.error(err);
+      console.error("Failed to send request:", err);
       Swal.fire("Error", "Failed to send request.", "error");
     }
   };
 
-  if (!user || !userData) return <div>Loading...</div>;
+  if (!user || !userData)
+    return (
+      <div>
+        <LoadingSpinner></LoadingSpinner>
+      </div>
+    );
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
@@ -88,15 +96,17 @@ const Profile = () => {
               </p>
               <p>
                 <span className="font-semibold">Address:</span>{" "}
-                {userData.address || "N/A"}
+                {userData?.address || "N/A"}
               </p>
               <p>
                 <span className="font-semibold">Role:</span>{" "}
-                {userData.role || "user"}
+                {userData?.role || "user"}
               </p>
               <p>
                 <span className="font-semibold">Status:</span>{" "}
-                {userData.status || "active"}
+                <span className="text-green-400 font-bold">
+                  {userData.status || "active"}
+                </span>
               </p>
               {userData.role === "chef" && (
                 <p>

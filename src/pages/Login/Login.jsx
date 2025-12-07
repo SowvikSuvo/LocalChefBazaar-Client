@@ -4,6 +4,7 @@ import LoadingSpinner from "../../components/Shared/LoadingSpinner";
 import useAuth from "../../hooks/useAuth";
 import { TbFidgetSpinner } from "react-icons/tb";
 import { motion } from "framer-motion";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const { signIn, loading, user } = useAuth();
@@ -23,14 +24,20 @@ const Login = () => {
     try {
       await signIn(email, password);
       navigate(from, { replace: true });
-      toast.success("Login Successful");
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Login Successful!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } catch (err) {
       console.log(err);
       toast.error(err?.message);
     }
   };
 
-  // Motion variants
+
   const cardVariant = {
     hidden: { opacity: 0, y: 50, scale: 0.9 },
     visible: {

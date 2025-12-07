@@ -58,7 +58,7 @@ const CreateMealFrom = () => {
       console.log(mealData);
 
       await axiosSecure.post("/create-meals", mealData);
-      // toast.success("Meal created successfully!");
+
       Swal.fire({
         position: "top-end",
         icon: "success",

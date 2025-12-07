@@ -14,16 +14,20 @@ import AdminMenu from "./Menu/AdminMenu";
 import ChefMenu from "./Menu/ChefMenu";
 import CustomerMenu from "./Menu/CustomerMenu";
 import { FaHome } from "react-icons/fa";
+import useRole from "../../../hooks/useRole";
 
 const Sidebar = () => {
   const { logOut } = useAuth();
+  const [role, roleLoading] = useRole();
   const [isActive, setActive] = useState(false);
 
   // Sidebar Responsive Handler
   const handleToggle = () => {
     setActive(!isActive);
   };
-
+  if (roleLoading) {
+    return null;
+  }
   return (
     <>
       {/* Small Screen Navbar, only visible till md breakpoint */}
@@ -74,9 +78,10 @@ const Sidebar = () => {
                   <FaHome></FaHome> Home Page
                 </span>
               </Link>
-              <CustomerMenu />
-              <ChefMenu />
-              <AdminMenu />
+
+              {role === "user" && <CustomerMenu />}
+              {role === "chef" && <ChefMenu />}
+              {role === "admin" && <AdminMenu />}
             </nav>
           </div>
 
@@ -84,11 +89,7 @@ const Sidebar = () => {
           <div>
             <hr />
 
-            <MenuItem
-              icon={FcSettings}
-              label="Profile"
-              address="/dashboard/profile"
-            />
+            <MenuItem icon={FcSettings} label="Profile" address="/dashboard" />
             <button
               onClick={logOut}
               className="flex cursor-pointer w-full items-center px-4 py-2 mt-5 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform"
