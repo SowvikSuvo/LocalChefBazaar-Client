@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import useAuth from "../../../hooks/useAuth";
 import coverImg from "../../../assets/images/banner.jpg";
-import axios from "axios";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../../components/Shared/LoadingSpinner";

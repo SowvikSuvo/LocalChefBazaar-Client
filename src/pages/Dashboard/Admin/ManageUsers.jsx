@@ -1,52 +1,91 @@
-import UserDataRow from '../../../components/Dashboard/TableRows/UserDataRow'
+import { useQuery } from "@tanstack/react-query";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 const ManageUsers = () => {
+  const axiosSecure = useAxiosSecure();
+
+  // Fetch all users
+  const { data: users = [], refetch } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/users");
+      return res.data;
+    },
+  });
+
+  // Handle Make Fraud
+  const handleMakeFraud = async (user) => {
+    const confirm = await Swal.fire({
+      title: "Are you sure?",
+      text: `You are about to mark ${user.displayName} as fraud.`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, mark fraud",
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+      const res = await axiosSecure.patch(`/users/fraud/${user.email}`);
+      if (res.data.success) {
+        toast.success(res.data.message);
+        refetch();
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to mark fraud");
+    }
+  };
+
   return (
-    <>
-      <div className='container mx-auto px-4 sm:px-8'>
-        <div className='py-8'>
-          <div className='-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto'>
-            <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
-              <table className='min-w-full leading-normal'>
-                <thead>
-                  <tr>
-                    <th
-                      scope='col'
-                      className='px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal'
-                    >
-                      Email
-                    </th>
-                    <th
-                      scope='col'
-                      className='px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal'
-                    >
-                      Role
-                    </th>
-                    <th
-                      scope='col'
-                      className='px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal'
-                    >
-                      Status
-                    </th>
+    <div className="p-5">
+      {" "}
+      <h1 className="text-3xl font-bold mb-5 text-center">Manage Users</h1>
+      <div className="overflow-x-auto">
+        <table className="table w-full">
+          <thead>
+            <tr>
+              <th>User Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
 
-                    <th
-                      scope='col'
-                      className='px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal'
+          <tbody>
+            {users.map((user) => (
+              <tr key={user._id}>
+                <td>{user.displayName}</td>
+                <td>{user.email}</td>
+                <td>{user.role}</td>
+                <td>
+                  {user.status === "fraud" ? (
+                    <span className="text-red-500 font-bold">Fraud</span>
+                  ) : (
+                    user.status
+                  )}
+                </td>
+                <td>
+                  {user.role !== "admin" && user.status !== "fraud" ? (
+                    <button
+                      className="btn btn-error btn-sm"
+                      onClick={() => handleMakeFraud(user)}
                     >
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <UserDataRow />
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+                      Make Fraud
+                    </button>
+                  ) : (
+                    <span className="text-gray-400">—</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-    </>
-  )
-}
+    </div>
+  );
+};
 
-export default ManageUsers
+export default ManageUsers;
