@@ -1,12 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-
 import Swal from "sweetalert2";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { motion } from "framer-motion";
 
 const OrderRequests = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+
+  // Build chefId exactly like it is stored in DB
+  const chefId = `chef_${user?.uid.slice(0, 6)}`;
 
   const {
     data: orders = [],
@@ -15,8 +18,8 @@ const OrderRequests = () => {
   } = useQuery({
     queryKey: ["chef-orders", user?.uid],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/orders/by-chef/${user?.uid}`);
-      return res.data;
+      const res = await axiosSecure.get(`/orders/by-chef/${chefId}`); // <-- Fixed
+      return res.data.data; // backend returns { success: true, data: orders }
     },
   });
 
@@ -25,7 +28,6 @@ const OrderRequests = () => {
       const result = await axiosSecure.patch(`/orders/status/${id}`, {
         orderStatus: status,
       });
-
       if (result.data.modifiedCount > 0) {
         Swal.fire("Success!", `Order ${status} successfully!`, "success");
         refetch();
@@ -40,19 +42,27 @@ const OrderRequests = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold text-center mb-6">Order Requests</h1>
-
+      {" "}
+      <h1 className="text-3xl font-bold text-center mb-6">
+        Order Requests
+      </h1>{" "}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {orders.map((order) => (
-          <div
+          <motion.div
             key={order._id}
             className="border rounded-xl p-5 shadow-md bg-white"
+            whileHover={{
+              scale: 1.02,
+              backgroundColor: "rgba(255,165,0,0.05)",
+            }}
           >
-            <h2 className="text-xl font-bold">{order.mealName}</h2>
-            <p className="text-gray-600">Price: ${order.price}</p>
-            <p>Quantity: {order.quantity}</p>
-            <p>User: {order.userEmail}</p>
-            <p>Address: {order.userAddress}</p>
+            {" "}
+            <h2 className="text-xl font-bold">{order.mealName}</h2>{" "}
+            <p className="text-gray-600">Price: ${order.price}</p>{" "}
+            <p>Quantity: {order.quantity}</p> <p>User: {order.userEmail}</p>{" "}
+            <p>Address: {order.userAddress}</p>{" "}
+            <p>Payment Status: {order.paymentStatus || "Pending"}</p>{" "}
+            <p>Order Time: {new Date(order.orderTime).toLocaleString()}</p>{" "}
             <p className="font-semibold mt-2">
               Status:{" "}
               <span
@@ -66,18 +76,13 @@ const OrderRequests = () => {
                     : "text-red-600"
                 }
               >
-                {order.orderStatus}
-              </span>
+                {order.orderStatus}{" "}
+              </span>{" "}
             </p>
-
             <div className="mt-4 space-y-2">
-              {/* Cancel Button */}
               <button
                 onClick={() => updateStatus(order._id, "cancelled")}
-                disabled={
-                  order.orderStatus !== "pending" ||
-                  order.orderStatus === "cancelled"
-                }
+                disabled={order.orderStatus !== "pending"}
                 className={`w-full py-2 rounded-lg text-white ${
                   order.orderStatus !== "pending"
                     ? "bg-gray-400 cursor-not-allowed"
@@ -87,13 +92,9 @@ const OrderRequests = () => {
                 Cancel
               </button>
 
-              {/* Accept Button */}
               <button
                 onClick={() => updateStatus(order._id, "accepted")}
-                disabled={
-                  order.orderStatus !== "pending" ||
-                  order.orderStatus === "accepted"
-                }
+                disabled={order.orderStatus !== "pending"}
                 className={`w-full py-2 rounded-lg text-white ${
                   order.orderStatus !== "pending"
                     ? "bg-gray-400 cursor-not-allowed"
@@ -103,7 +104,6 @@ const OrderRequests = () => {
                 Accept
               </button>
 
-              {/* Deliver Button */}
               <button
                 onClick={() => updateStatus(order._id, "delivered")}
                 disabled={order.orderStatus !== "accepted"}
@@ -116,7 +116,7 @@ const OrderRequests = () => {
                 Deliver
               </button>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>
