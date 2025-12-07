@@ -22,6 +22,7 @@ import Meals from "../pages/Home/Meals";
 import MealsDetails from "../pages/MealsDetails/MealsDetails";
 import OrderPage from "../components/Modal/OrderModal";
 import PaymentSuccess from "../pages/Payment/PaymentSuccess";
+import UpdateMeals from "../components/Form/UpdateMeals";
 
 export const router = createBrowserRouter([
   {
@@ -149,6 +150,15 @@ export const router = createBrowserRouter([
       {
         path: "order-requests",
         element: <OrderRequests />,
+      },
+      {
+        path: "update-meal/:id",
+        element: (
+          <PrivateRoute>
+            {" "}
+            <UpdateMeals></UpdateMeals>
+          </PrivateRoute>
+        ),
       },
     ],
   },
