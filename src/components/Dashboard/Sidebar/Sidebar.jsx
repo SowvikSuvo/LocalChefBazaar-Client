@@ -31,7 +31,7 @@ const Sidebar = () => {
   return (
     <>
       {/* Small Screen Navbar, only visible till md breakpoint */}
-      <div className="bg-gray-100 text-gray-800 flex justify-between md:hidden">
+      <div className="bg-gray-100 text-gray-800 flex justify-between md:hidden sticky top-0 z-50 shadow-md">
         <div>
           <div className="block cursor-pointer p-4 font-bold">
             <Link to="/">
@@ -50,7 +50,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`z-10 md:fixed flex flex-col justify-between overflow-x-hidden bg-gray-100 w-64 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform ${
+        className={`z-10 md:fixed flex  flex-col justify-between overflow-x-hidden bg-gray-100 w-64 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform ${
           isActive && "-translate-x-full"
         }  md:translate-x-0  transition duration-200 ease-in-out`}
       >
@@ -72,7 +72,7 @@ const Sidebar = () => {
               {/* Role-Based Menu */}
               <Link
                 to="/"
-                className="flex items-center px-4 py-2 mt-5 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform rounded-lg"
+                className="flex items-center px-4 py-2 mt-10 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform rounded-lg"
               >
                 <span className="flex items-center gap-5 font-semibold">
                   <FaHome></FaHome> Home Page

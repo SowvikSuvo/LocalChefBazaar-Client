@@ -49,7 +49,7 @@ const MyMeals = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-pink-50 to-purple-100">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-pink-50 to-purple-100 rounded-2xl">
       {/* Glassy Background Overlay */}
       <div className="fixed inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 via-pink-500/20 to-purple-600/20 blur-3xl" />
@@ -57,15 +57,15 @@ const MyMeals = () => {
         <div className="absolute bottom-20 right-20 w-80 h-80 bg-purple-600/30 rounded-full blur-3xl animate-pulse delay-1000" />
       </div>
 
-      <div className="p-6 max-w-7xl mx-auto">
+      <div className="p-6 max-w-7xl mx-auto ">
         {/* Epic Title */}
         <motion.div
           initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
-          className="text-center mb-12"
+          className="text-center mb-12 "
         >
-          <h1 className="text-5xl md:text-6xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 drop-shadow-2xl">
+          <h1 className="text-4xl md:text-3xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 drop-shadow-2xl ">
             My Delicious Meals
           </h1>
           <p className="mt-3 text-lg text-gray-600 font-medium">

@@ -10,7 +10,8 @@ const Login = () => {
   const { signIn, loading, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state || "/";
+
+  const from = location.state?.from?.pathname || "/";
 
   if (loading) return <LoadingSpinner />;
   if (user) return <Navigate to={from} replace={true} />;
@@ -23,7 +24,7 @@ const Login = () => {
 
     try {
       await signIn(email, password);
-      navigate(from, { replace: true });
+      navigate("/", { replace: true });
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -36,7 +37,6 @@ const Login = () => {
       toast.error(err?.message);
     }
   };
-
 
   const cardVariant = {
     hidden: { opacity: 0, y: 50, scale: 0.9 },

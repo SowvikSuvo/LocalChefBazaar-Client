@@ -22,7 +22,7 @@ const Footer = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className="bg-gradient-to-br from-orange-100 to-orange-200 text-gray-800 mt-10"
+      className="bg-gradient-to-br from-orange-100 to-orange-200 text-gray-800 mt-10 rounded-t-2xl"
     >
       <div className="max-w-7xl mx-auto px-4 py-12 grid md:grid-cols-4 gap-8">
         {/* Logo & Branding */}

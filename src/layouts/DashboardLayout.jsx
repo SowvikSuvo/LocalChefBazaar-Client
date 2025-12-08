@@ -4,16 +4,20 @@ import Footer from "../components/Shared/Footer/Footer";
 
 const DashboardLayout = () => {
   return (
-    <div className="relative min-h-screen md:flex bg-white">
-      {/* Left Side: Sidebar Component */}
+    <div className="min-h-screen flex flex-col md:flex-row bg-white">
+      {/* Sidebar */}
       <Sidebar />
-      {/* Right Side: Dashboard Dynamic Content */}
-      <div className="flex-1  md:ml-64">
-        <div className="p-5">
-          {/* Outlet for dynamic contents */}
+
+      {/* Main Content */}
+      <div className="flex-1 md:ml-64 flex flex-col">
+        <main className="flex-1 p-5">
           <Outlet />
-        </div>
-        {/* <Footer></Footer> */}
+        </main>
+
+        {/* Footer */}
+        <footer className="mt-auto">
+          <Footer />
+        </footer>
       </div>
     </div>
   );

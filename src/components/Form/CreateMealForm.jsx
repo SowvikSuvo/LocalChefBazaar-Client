@@ -6,9 +6,10 @@ import "react-toastify/dist/ReactToastify.css";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 const CreateMealFrom = () => {
+  const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
@@ -44,6 +45,8 @@ const CreateMealFrom = () => {
 
   const onSubmit = async (data) => {
     try {
+      setLoading(true); // start loader
+
       const imgURL = await uploadImageBB();
 
       const mealData = {
@@ -55,10 +58,8 @@ const CreateMealFrom = () => {
         createdAt: new Date(),
         deliveryArea: data.deliveryArea,
       };
-      console.log(mealData);
 
       await axiosSecure.post("/create-meals", mealData);
-
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -66,11 +67,14 @@ const CreateMealFrom = () => {
         showConfirmButton: false,
         timer: 1500,
       });
+
       navigate("/meals");
       reset();
       setImageFile(null);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false); // stop loader
     }
   };
 

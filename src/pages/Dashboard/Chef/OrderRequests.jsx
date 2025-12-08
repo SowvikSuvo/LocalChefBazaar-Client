@@ -1,9 +1,20 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
+import {
+  DollarSign,
+  Hash,
+  Mail,
+  MapPinned,
+  CreditCard,
+  Clock,
+  PackageCheck,
+  XCircle,
+  CheckCircle2,
+  Truck,
+} from "lucide-react";
 
 const OrderRequests = () => {
   const { user, loading: authLoading } = useAuth();
@@ -69,21 +80,71 @@ const OrderRequests = () => {
           return (
             <motion.div
               key={order._id}
-              className="border rounded-xl p-5 shadow-md bg-white"
+              className="border rounded-2xl p-5 shadow-xl bg-white/80 backdrop-blur-md 
+             hover:shadow-[0_8px_30px_rgba(255,165,0,0.3)] 
+             transition-all duration-300"
               whileHover={{
-                scale: 1.02,
-                backgroundColor: "rgba(255,165,0,0.05)",
+                scale: 1.03,
+                backgroundColor: "rgba(255,255,255,0.9)",
               }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
             >
-              <h2 className="text-xl font-bold">{order.mealName}</h2>
-              <p>Price: {order.price} TK</p>
-              <p>Quantity: {order.quantity}</p>
-              <p>User Email: {order.userEmail}</p>
-              <p>Address: {order.userAddress}</p>
-              <p>Payment Status: {order.paymentStatus || "Pending"}</p>
-              <p>Order Time: {new Date(order.orderTime).toLocaleString()}</p>
-              <p className="font-semibold mt-2">
-                Status:{" "}
+              {/* Title */}
+              <h2 className="text-xl font-bold text-orange-600 flex items-center gap-2">
+                <PackageCheck className="w-5 h-5 text-orange-500" />
+                {order.mealName}
+              </h2>
+
+              {/* Price */}
+              <p className="flex items-center gap-2 mt-2 text-gray-700">
+                <DollarSign className="w-4 h-4 text-green-600" />
+                <span>Price: ${order.price} USD</span>
+              </p>
+
+              {/* Quantity */}
+              <p className="flex items-center gap-2 text-gray-700">
+                <Hash className="w-4 h-4 text-purple-500" />
+                Quantity: {order.quantity}
+              </p>
+
+              {/* Email */}
+              <p className="flex items-center gap-2 text-gray-700">
+                <Mail className="w-4 h-4 text-blue-500" />
+                {order.userEmail}
+              </p>
+
+              {/* Address */}
+              <p className="flex items-center gap-2 text-gray-700">
+                <MapPinned className="w-4 h-4 text-red-500" />
+                {order.userAddress}
+              </p>
+
+              {/* Payment Status */}
+              <p className="flex items-center gap-2 text-gray-700">
+                <CreditCard className="w-4 h-4 text-indigo-600" />
+                Payment:{" "}
+                <span
+                  className={`font-medium ${
+                    order.paymentStatus === "paid"
+                      ? "text-green-600"
+                      : "text-yellow-600"
+                  }`}
+                >
+                  {order.paymentStatus || "Pending"}
+                </span>
+              </p>
+
+              {/* Time */}
+              <p className="flex items-center gap-2 text-gray-700">
+                <Clock className="w-4 h-4 text-gray-500" />
+                {new Date(order.orderTime).toLocaleString()}
+              </p>
+
+              {/* Order Status */}
+              <p className="font-semibold mt-3 flex items-center gap-2">
+                Status:
                 <span
                   className={
                     isPending
@@ -100,41 +161,44 @@ const OrderRequests = () => {
               </p>
 
               {/* Buttons */}
-              <div className="mt-4 space-y-2">
+              <div className="mt-5 space-y-2">
+                {/* Cancel */}
                 <button
                   onClick={() => updateStatus(order._id, "cancelled")}
                   disabled={!isPending}
-                  className={`w-full py-2 rounded-lg text-white ${
+                  className={`w-full py-2 rounded-lg text-white flex items-center justify-center gap-2 transition-all ${
                     !isPending
                       ? "bg-gray-400 cursor-not-allowed"
                       : "bg-red-500 hover:bg-red-600"
                   }`}
                 >
-                  Cancel
+                  <XCircle className="w-4 h-4" /> Cancel
                 </button>
 
+                {/* Accept */}
                 <button
                   onClick={() => updateStatus(order._id, "accepted")}
                   disabled={!isPending}
-                  className={`w-full py-2 rounded-lg text-white ${
+                  className={`w-full py-2 rounded-lg text-white flex items-center justify-center gap-2 transition-all ${
                     !isPending
                       ? "bg-gray-400 cursor-not-allowed"
                       : "bg-blue-500 hover:bg-blue-600"
                   }`}
                 >
-                  Accept
+                  <CheckCircle2 className="w-4 h-4" /> Accept
                 </button>
 
+                {/* Deliver */}
                 <button
                   onClick={() => updateStatus(order._id, "delivered")}
                   disabled={!isAccepted}
-                  className={`w-full py-2 rounded-lg text-white ${
+                  className={`w-full py-2 rounded-lg text-white flex items-center justify-center gap-2 transition-all ${
                     !isAccepted
                       ? "bg-gray-400 cursor-not-allowed"
                       : "bg-green-600 hover:bg-green-700"
                   }`}
                 >
-                  Deliver
+                  <Truck className="w-4 h-4" /> Deliver
                 </button>
               </div>
             </motion.div>
