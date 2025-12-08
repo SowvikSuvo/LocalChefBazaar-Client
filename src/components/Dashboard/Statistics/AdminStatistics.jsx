@@ -1,91 +1,179 @@
-import { FaUserAlt, FaDollarSign } from 'react-icons/fa'
-import { BsFillCartPlusFill, BsFillHouseDoorFill } from 'react-icons/bs'
+import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { FaUserAlt, FaDollarSign } from "react-icons/fa";
+import {
+  BsFillCartPlusFill,
+  BsCheckCircleFill,
+  BsClockFill,
+} from "react-icons/bs";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 const AdminStatistics = () => {
+  const axiosSecure = useAxiosSecure();
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["admin-stats"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/admin/stats");
+      return res.data.data;
+    },
+    retry: 1, // optional
+  });
+
+  if (isLoading) return <p className="text-center mt-20 text-lg">Loading...</p>;
+  if (error)
+    return <p className="text-center mt-20 text-lg">Failed to load stats</p>;
+
+  const {
+    totalOrders,
+    ordersPending,
+    ordersDelivered,
+    totalPayments,
+    totalUsers,
+  } = data;
+
+  const pieData = [
+    { name: "Pending", value: ordersPending },
+    { name: "Delivered", value: ordersDelivered },
+  ];
+
+  const barData = [
+    { name: "Orders", Pending: ordersPending, Delivered: ordersDelivered },
+    { name: "Revenue", Revenue: totalPayments },
+  ];
+
   return (
-    <div>
-      <div className='mt-12'>
-        {/* small cards */}
-        <div className='mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grow'>
-          {/* Sales Card */}
-          <div className='relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md'>
-            <div
-              className={`bg-clip-border mx-4 rounded-xl overflow-hidden bg-linear-to-tr shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center from-orange-600 to-orange-400 text-white shadow-orange-500/40`}
-            >
-              <FaDollarSign className='w-6 h-6 text-white' />
-            </div>
-            <div className='p-4 text-right'>
-              <p className='block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600'>
-                Total Revenue
-              </p>
-              <h4 className='block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900'>
-                $120
-              </h4>
-            </div>
+    <div className="p-6 space-y-8">
+      {/* Small Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Total Revenue */}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="bg-white shadow-lg rounded-xl p-4 flex items-center space-x-4"
+        >
+          <div className="bg-orange-500 text-white p-4 rounded-full">
+            <FaDollarSign size={24} />
           </div>
-          {/* Total Orders */}
-          <div className='relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md'>
-            <div
-              className={`bg-clip-border mx-4 rounded-xl overflow-hidden bg-linear-to-tr shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center from-blue-600 to-blue-400 text-white shadow-blue-500/40`}
-            >
-              <BsFillCartPlusFill className='w-6 h-6 text-white' />
-            </div>
-            <div className='p-4 text-right'>
-              <p className='block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600'>
-                Total Orders
-              </p>
-              <h4 className='block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900'>
-                120
-              </h4>
-            </div>
+          <div>
+            <p className="text-sm text-gray-500">Total Revenue</p>
+            <h3 className="text-xl font-bold">${totalPayments}</h3>
           </div>
-          {/* Total Plants */}
-          <div className='relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md'>
-            <div
-              className={`bg-clip-border mx-4 rounded-xl overflow-hidden bg-linear-to-tr shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center from-pink-600 to-pink-400 text-white shadow-pink-500/40`}
-            >
-              <BsFillHouseDoorFill className='w-6 h-6 text-white' />
-            </div>
-            <div className='p-4 text-right'>
-              <p className='block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600'>
-                Total Plants
-              </p>
-              <h4 className='block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900'>
-                120
-              </h4>
-            </div>
+        </motion.div>
+
+        {/* Total Orders */}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="bg-white shadow-lg rounded-xl p-4 flex items-center space-x-4"
+        >
+          <div className="bg-blue-500 text-white p-4 rounded-full">
+            <BsFillCartPlusFill size={24} />
           </div>
-          {/* Users Card */}
-          <div className='relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md'>
-            <div
-              className={`bg-clip-border mx-4 rounded-xl overflow-hidden bg-linear-to-tr shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center from-green-600 to-green-400 text-white shadow-green-500/40`}
-            >
-              <FaUserAlt className='w-6 h-6 text-white' />
-            </div>
-            <div className='p-4 text-right'>
-              <p className='block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600'>
-                Total User
-              </p>
-              <h4 className='block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900'>
-                10
-              </h4>
-            </div>
+          <div>
+            <p className="text-sm text-gray-500">Total Orders</p>
+            <h3 className="text-xl font-bold">{totalOrders}</h3>
           </div>
+        </motion.div>
+
+        {/* Orders Pending */}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="bg-white shadow-lg rounded-xl p-4 flex items-center space-x-4"
+        >
+          <div className="bg-yellow-500 text-white p-4 rounded-full">
+            <BsClockFill size={24} />
+          </div>
+          <div>
+            <p className="text-sm text-gray-500">Orders Pending</p>
+            <h3 className="text-xl font-bold">{ordersPending}</h3>
+          </div>
+        </motion.div>
+
+        {/* Orders Delivered */}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="bg-white shadow-lg rounded-xl p-4 flex items-center space-x-4"
+        >
+          <div className="bg-green-500 text-white p-4 rounded-full">
+            <BsCheckCircleFill size={24} />
+          </div>
+          <div>
+            <p className="text-sm text-gray-500">Orders Delivered</p>
+            <h3 className="text-xl font-bold">{ordersDelivered}</h3>
+          </div>
+        </motion.div>
+
+        {/* Total Users */}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="bg-white shadow-lg rounded-xl p-4 flex items-center space-x-4 col-span-1 sm:col-span-2 lg:col-span-1"
+        >
+          <div className="bg-green-600 text-white p-4 rounded-full">
+            <FaUserAlt size={24} />
+          </div>
+          <div>
+            <p className="text-sm text-gray-500">Total Users</p>
+            <h3 className="text-xl font-bold">{totalUsers}</h3>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Pie Chart for Orders */}
+        <div className="bg-white shadow-lg rounded-xl p-4">
+          <h3 className="font-bold text-lg mb-4">Orders Distribution</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart>
+              <Pie
+                data={pieData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={80}
+                label
+              >
+                {pieData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
         </div>
 
-        <div className='mb-4 grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3'>
-          {/*Sales Bar Chart */}
-          <div className='relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md overflow-hidden xl:col-span-2'>
-            {/* Chart goes here.. */}
-          </div>
-          {/* Calender */}
-          <div className=' relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md overflow-hidden'>
-            {/* Calender */}
-          </div>
+        {/* Bar Chart for Orders & Revenue */}
+        <div className="bg-white shadow-lg rounded-xl p-4">
+          <h3 className="font-bold text-lg mb-4">Orders & Revenue</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={barData}>
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="Pending" stackId="a" fill="#FFBB28" />
+              <Bar dataKey="Delivered" stackId="a" fill="#00C49F" />
+              <Bar dataKey="Revenue" fill="#0088FE" />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AdminStatistics
+export default AdminStatistics;
