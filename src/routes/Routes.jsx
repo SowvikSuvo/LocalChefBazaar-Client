@@ -10,8 +10,6 @@ import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 import Profile from "../pages/Dashboard/Common/Profile";
 import Statistics from "../pages/Dashboard/Common/Statistics";
 import MainLayout from "../layouts/MainLayout";
-import MyInventory from "../pages/Dashboard/Chef/MyMeals";
-import OrderRequests from "../pages/Dashboard/Chef/OrderRequests";
 import MyOrders from "../pages/Dashboard/Customer/MyOrders";
 import { createBrowserRouter } from "react-router";
 import MyReview from "../pages/Dashboard/Customer/MyReview";
@@ -23,6 +21,7 @@ import MealsDetails from "../pages/MealsDetails/MealsDetails";
 import OrderPage from "../components/Modal/OrderModal";
 import PaymentSuccess from "../pages/Payment/PaymentSuccess";
 import UpdateMeals from "../components/Form/UpdateMeals";
+import OrderRequests from "../pages/Dashboard/Chef/OrderRequests";
 
 export const router = createBrowserRouter([
   {
@@ -149,7 +148,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "order-requests",
-        element: <OrderRequests />,
+        element: (
+          <PrivateRoute>
+            <OrderRequests></OrderRequests>
+          </PrivateRoute>
+        ),
       },
       {
         path: "update-meal/:id",

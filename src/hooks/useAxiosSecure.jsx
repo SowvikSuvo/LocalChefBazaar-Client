@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import useAuth from "./useAuth";
@@ -11,37 +11,40 @@ const axiosInstance = axios.create({
 const useAxiosSecure = () => {
   const { user, logOut, loading } = useAuth();
   const navigate = useNavigate();
+  const interceptorsSet = useRef(false);
 
   useEffect(() => {
-    if (!loading && user) {
-      const attachToken = async (config) => {
-        const token = await user.getIdToken(); // 🔥 FIXED
-        config.headers.Authorization = `Bearer ${token}`;
-        return config;
-      };
+    if (!user || loading || interceptorsSet.current) return;
 
-      const requestInterceptor = axiosInstance.interceptors.request.use(
-        attachToken,
-        (error) => Promise.reject(error)
-      );
+    // Attach token to requests
+    const attachToken = async (config) => {
+      const token = await user.getIdToken();
+      if (token) config.headers.Authorization = `Bearer ${token}`;
+      return config;
+    };
 
-      const responseInterceptor = axiosInstance.interceptors.response.use(
-        (res) => res,
-        (err) => {
-          if (err?.response?.status === 401 || err?.response?.status === 403) {
-            logOut().finally(() => {
-              navigate("/login");
-            });
-          }
-          return Promise.reject(err);
+    const requestInterceptor = axiosInstance.interceptors.request.use(
+      attachToken,
+      (error) => Promise.reject(error)
+    );
+
+    const responseInterceptor = axiosInstance.interceptors.response.use(
+      (res) => res,
+      (err) => {
+        if (err?.response?.status === 401 || err?.response?.status === 403) {
+          logOut().finally(() => navigate("/login"));
         }
-      );
+        return Promise.reject(err);
+      }
+    );
 
-      return () => {
-        axiosInstance.interceptors.request.eject(requestInterceptor);
-        axiosInstance.interceptors.response.eject(responseInterceptor);
-      };
-    }
+    interceptorsSet.current = true;
+
+    return () => {
+      axiosInstance.interceptors.request.eject(requestInterceptor);
+      axiosInstance.interceptors.response.eject(responseInterceptor);
+      interceptorsSet.current = false;
+    };
   }, [user, loading, logOut, navigate]);
 
   return axiosInstance;

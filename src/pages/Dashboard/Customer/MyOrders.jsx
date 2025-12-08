@@ -140,23 +140,36 @@ const MyOrders = () => {
               </div>
             </div>
 
-            {/* Conditional Pay / Paid button */}
-
-            <button
-              onClick={
-                order.paymentStatus?.toLowerCase().trim() === "pending"
-                  ? () => handlePayment(order)
-                  : undefined
-              }
-              disabled={order.paymentStatus === "paid"}
-              className={`mt-6 w-full py-3 rounded-xl font-semibold text-white ${
-                order.paymentStatus === "paid"
-                  ? "bg-green-500 cursor-not-allowed"
-                  : "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition duration-300"
-              }`}
-            >
-              {order.paymentStatus === "paid" ? "Paid" : "Pay Now"}
-            </button>
+            {/* Conditional Buttons */}
+            <div className="mt-6 w-full">
+              {order.orderStatus === "accepted" &&
+              order.paymentStatus === "pending" ? (
+                <button
+                  onClick={() => handlePayment(order)}
+                  className="w-full py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition duration-300"
+                >
+                  Pay Now
+                </button>
+              ) : order.paymentStatus === "paid" ? (
+                <button
+                  disabled
+                  className="w-full py-3 rounded-xl font-semibold text-white bg-green-500 cursor-not-allowed"
+                >
+                  Paid
+                </button>
+              ) : (
+                <button
+                  disabled
+                  className="w-full py-3 rounded-xl font-semibold bg-gray-300 text-gray-600 cursor-not-allowed"
+                >
+                  {order.orderStatus === "pending"
+                    ? "Waiting for Chef"
+                    : order.orderStatus === "rejected"
+                    ? "Rejected"
+                    : "Unavailable"}
+                </button>
+              )}
+            </div>
           </motion.div>
         ))}
       </div>
