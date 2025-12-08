@@ -9,8 +9,6 @@ const OrderRequests = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const chefId = `chef_${user?.uid.slice(0, 6)}`;
-
   // Fetch orders for this chef
   useEffect(() => {
     if (authLoading) return; // wait until auth initializes
@@ -19,6 +17,7 @@ const OrderRequests = () => {
     const fetchOrders = async () => {
       try {
         const res = await axiosSecure.get("/orders/by-chef");
+        console.log("Fetched Orders:", res.data.data); // Should show real orders now
         setOrders(res.data.data || []);
       } catch (err) {
         console.error("Fetch Orders Error:", err);
@@ -28,7 +27,7 @@ const OrderRequests = () => {
     };
 
     fetchOrders();
-  }, [user, authLoading, chefId, axiosSecure]);
+  }, [user, authLoading, axiosSecure]);
 
   // Update order status and reflect locally
   const updateStatus = async (orderId, status) => {
@@ -55,14 +54,16 @@ const OrderRequests = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold text-center mb-6">Order Requests</h1>
+      {" "}
+      <h1 className="text-3xl font-bold text-center mb-6">
+        Order Requests
+      </h1>{" "}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {orders.map((order) => {
           const { orderStatus } = order;
           const isPending = orderStatus === "pending";
           const isAccepted = orderStatus === "accepted";
           const isDelivered = orderStatus === "delivered";
-          const isCancelled = orderStatus === "cancelled";
 
           return (
             <motion.div
