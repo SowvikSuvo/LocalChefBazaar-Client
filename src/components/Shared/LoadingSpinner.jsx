@@ -1,15 +1,13 @@
-import { ScaleLoader } from "react-spinners";
+import { RingLoader } from "react-spinners";
 
 const LoadingSpinner = ({ smallHeight }) => {
   return (
     <div
-      className={` ${smallHeight ? "h-[250px]" : "h-[70vh]"}
-      flex 
-      flex-col 
-      justify-center 
-      items-center `}
+      className={`${
+        smallHeight ? "h-[250px]" : "h-[70vh]"
+      } flex justify-center items-center`}
     >
-      <ScaleLoader size={100} color="orange" />
+      <RingLoader size={90} color="orange" speedMultiplier={1} />
     </div>
   );
 };

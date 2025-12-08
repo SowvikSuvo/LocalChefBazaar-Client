@@ -82,7 +82,6 @@ const Sidebar = () => {
               {role === "user" && <CustomerMenu />}
               {role === "chef" && <ChefMenu />}
               {role === "admin" && <AdminMenu />}
-              {/* <AdminMenu /> */}
             </nav>
           </div>
 

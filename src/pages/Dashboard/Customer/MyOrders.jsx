@@ -11,6 +11,7 @@ import {
   CreditCard,
   CircleCheck,
 } from "lucide-react";
+import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 
 const MyOrders = () => {
   const { user } = useAuth();
@@ -18,7 +19,6 @@ const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Handle payment
   const handlePayment = async (order) => {
     console.log("Button clicked for order:", order._id);
 
@@ -41,15 +41,6 @@ const MyOrders = () => {
     }
   };
 
-  // Update only the specific order to "paid" locally after payment success
-  // const markOrderPaid = (orderId) => {
-  //   setOrders((prevOrders) =>
-  //     prevOrders.map((o) =>
-  //       o._id === orderId ? { ...o, paymentStatus: "paid" } : o
-  //     )
-  //   );
-  // };
-
   useEffect(() => {
     if (!user?.email) return;
 
@@ -69,12 +60,7 @@ const MyOrders = () => {
     fetchOrders();
   }, [user?.email, axiosSecure]);
 
-  if (loading)
-    return (
-      <div className="text-center mt-10 text-lg md:text-xl font-medium text-gray-700">
-        Loading...
-      </div>
-    );
+  if (loading) return <LoadingSpinner></LoadingSpinner>;
 
   if (!orders.length)
     return (
@@ -142,15 +128,15 @@ const MyOrders = () => {
 
             {/* Conditional Buttons */}
             <div className="mt-6 w-full">
-              {order.orderStatus === "accepted" &&
-              order.paymentStatus === "pending" ? (
+              {order.orderStatus?.toLowerCase() === "accepted" &&
+              order.paymentStatus?.toLowerCase() === "pending" ? (
                 <button
                   onClick={() => handlePayment(order)}
                   className="w-full py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition duration-300"
                 >
                   Pay Now
                 </button>
-              ) : order.paymentStatus === "paid" ? (
+              ) : order.paymentStatus?.toLowerCase() === "paid" ? (
                 <button
                   disabled
                   className="w-full py-3 rounded-xl font-semibold text-white bg-green-500 cursor-not-allowed"
@@ -162,9 +148,9 @@ const MyOrders = () => {
                   disabled
                   className="w-full py-3 rounded-xl font-semibold bg-gray-300 text-gray-600 cursor-not-allowed"
                 >
-                  {order.orderStatus === "pending"
+                  {order.orderStatus?.toLowerCase() === "pending"
                     ? "Waiting for Chef"
-                    : order.orderStatus === "rejected"
+                    : order.orderStatus?.toLowerCase() === "rejected"
                     ? "Rejected"
                     : "Unavailable"}
                 </button>

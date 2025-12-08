@@ -18,6 +18,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import LoadingSpinner from "../../Shared/LoadingSpinner";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -33,7 +34,7 @@ const AdminStatistics = () => {
     retry: 1, // optional
   });
 
-  if (isLoading) return <p className="text-center mt-20 text-lg">Loading...</p>;
+  if (isLoading) return <LoadingSpinner></LoadingSpinner>;
   if (error)
     return <p className="text-center mt-20 text-lg">Failed to load stats</p>;
 
@@ -56,7 +57,10 @@ const AdminStatistics = () => {
   ];
 
   return (
-    <div className="p-6 space-y-8">
+    <div className="p-6 space-y-8 mt-10">
+      <h1 className="text-4xl font-extrabold mb-8 text-center text-gradient bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
+        Platform Overview
+      </h1>
       {/* Small Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Total Revenue */}
@@ -68,7 +72,7 @@ const AdminStatistics = () => {
             <FaDollarSign size={24} />
           </div>
           <div>
-            <p className="text-sm text-gray-500">Total Revenue</p>
+            <p className="text-sm text-gray-500">Total Payment Amount</p>
             <h3 className="text-xl font-bold">${totalPayments}</h3>
           </div>
         </motion.div>

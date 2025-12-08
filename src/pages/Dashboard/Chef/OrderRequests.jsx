@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 
 const OrderRequests = () => {
   const { user, loading: authLoading } = useAuth();
@@ -46,8 +48,7 @@ const OrderRequests = () => {
     }
   };
 
-  if (authLoading || loading)
-    return <p className="text-center mt-20 text-lg">Loading...</p>;
+  if (authLoading || loading) return <LoadingSpinner></LoadingSpinner>;
 
   if (!orders.length)
     return <p className="text-center mt-20 text-lg">No orders found.</p>;
@@ -55,7 +56,7 @@ const OrderRequests = () => {
   return (
     <div className="container mx-auto p-6">
       {" "}
-      <h1 className="text-3xl font-bold text-center mb-6">
+      <h1 className="text-4xl font-extrabold mb-8 text-center text-gradient bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
         Order Requests
       </h1>{" "}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

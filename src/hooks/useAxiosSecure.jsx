@@ -16,7 +16,6 @@ const useAxiosSecure = () => {
   useEffect(() => {
     if (!user || loading || interceptorsSet.current) return;
 
-    // Attach token to requests
     const attachToken = async (config) => {
       const token = await user.getIdToken();
       if (token) config.headers.Authorization = `Bearer ${token}`;
