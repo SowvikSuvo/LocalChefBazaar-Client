@@ -3,12 +3,14 @@ import { motion } from "framer-motion";
 import Slider from "react-slick";
 import { FaArrowRight, FaLeaf, FaStar } from "react-icons/fa";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ReviewsSection from "./ReviewsSection";
 import Container from "../../components/Shared/Container";
+import { ChefHat, MapPin, Star, DollarSign } from "lucide-react";
 import { Typewriter } from "react-simple-typewriter";
+import useAuth from "../../hooks/useAuth";
 
 const heroImages = [
   "/image9.jpg",
@@ -35,12 +37,14 @@ const heroSliderSettings = {
 };
 
 const HomePage = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const [meals, setMeals] = useState([]);
 
   useEffect(() => {
     const fetchMeals = async () => {
-      const res = await axiosSecure.get("/meals");
+      const res = await axiosSecure.get("/meals?limit=6");
       setMeals(res.data.data);
     };
     fetchMeals();
@@ -116,35 +120,77 @@ const HomePage = () => {
 
         {/* Daily Meals Section */}
         <section className="container mx-auto px-4 py-16">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-            Daily Meals
+          <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 bg-clip-text text-transparent">
+            Latest Daily Meals
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {meals.map((meal) => (
-              <div
+              <motion.div
                 key={meal._id}
-                className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100"
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                whileHover={{ scale: 1.03 }}
+                className="bg-white rounded-2xl overflow-hidden shadow-lg border border-orange-200"
               >
+                {/* IMAGE */}
                 <img
                   src={meal.foodImage}
-                  alt={meal.mealName}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-52 object-cover"
                 />
-                <div className="p-4 space-y-2">
-                  <h3 className="font-bold text-lg text-gray-800">
-                    {meal.mealName}
-                  </h3>
-                  <p className="text-gray-600">{meal.ingredients.join(", ")}</p>
-                  <div className="flex justify-between items-center mt-2">
-                    <span className="font-semibold text-orange-500">
-                      ${meal.price}
-                    </span>
-                    <span className="flex items-center gap-1 text-yellow-400">
-                      <FaStar /> {meal.rating.toFixed(1)}
-                    </span>
+
+                {/* CONTENT */}
+                <div className="p-5">
+                  <h2 className="text-xl font-bold text-orange-700 mb-2">
+                    {meal.foodName}
+                  </h2>
+
+                  {/* CHEF NAME */}
+                  <div className="flex items-center gap-2 text-gray-700">
+                    <ChefHat size={18} className="text-orange-600" />
+                    <span className="font-medium">{meal.chefName}</span>
                   </div>
+
+                  {/* CHEF ID */}
+                  <p className="text-gray-500 text-sm mb-2">
+                    Chef ID: {meal.chefId}
+                  </p>
+
+                  {/* DELIVERY AREA */}
+                  <div className="flex items-center gap-2 text-gray-700 mb-2">
+                    <MapPin size={18} className="text-orange-600" />
+                    <span>{meal.deliveryArea}</span>
+                  </div>
+
+                  {/* PRICE & RATING */}
+                  <div className="flex justify-between mt-3">
+                    <div className="flex items-center gap-1 text-orange-700">
+                      <DollarSign size={18} />
+                      <span className="font-bold text-lg">{meal.price}</span>
+                    </div>
+
+                    <div className="flex items-center gap-1 text-yellow-500">
+                      <Star size={18} fill="gold" />
+                      <span className="font-medium">{meal.rating}</span>
+                    </div>
+                  </div>
+
+                  {/* BUTTON */}
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    onClick={() => {
+                      if (!user) {
+                        navigate("/login");
+                        return;
+                      }
+                      navigate(`/meal/${meal._id}`);
+                    }}
+                    className="mt-5 w-full py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500 transition"
+                  >
+                    See Details
+                  </motion.button>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
@@ -153,7 +199,7 @@ const HomePage = () => {
         <ReviewsSection />
 
         {/* Extra Section */}
-        <section className="container mx-auto px-4 py-16 flex flex-col md:flex-row items-center justify-between bg-gradient-to-r from-pink-100 via-orange-100 to-yellow-100 rounded-3xl shadow-lg">
+        <section className="container mx-auto px-10 py-16 flex flex-col md:flex-row items-center justify-between bg-gradient-to-r from-pink-100 via-orange-100 to-yellow-100 rounded-3xl shadow-lg">
           <motion.div
             className="md:w-1/2 mb-6 md:mb-0"
             initial={{ x: -50, opacity: 0 }}
@@ -167,12 +213,15 @@ const HomePage = () => {
               Our meals are made with the freshest ingredients to ensure quality
               and taste.
             </p>
-            <motion.button
-              className="bg-orange-500 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition transform"
+            <motion.a
+              href="https://www.healthline.com/nutrition/50-super-healthy-foods"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition transform inline-block"
               whileHover={{ scale: 1.1 }}
             >
               Learn More
-            </motion.button>
+            </motion.a>
           </motion.div>
           <motion.div
             className="md:w-1/2 flex justify-center"

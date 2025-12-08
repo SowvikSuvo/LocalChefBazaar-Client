@@ -1,63 +1,67 @@
-import Button from '../components/Shared/Button/Button'
-import { useNavigate } from 'react-router'
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router";
+import { FaHome, FaArrowLeft } from "react-icons/fa";
 
 const ErrorPage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
-    <section className='bg-white '>
-      <div className='container flex items-center min-h-screen px-6 py-12 mx-auto'>
-        <div className='flex flex-col items-center max-w-sm mx-auto text-center'>
-          <p className='p-3 text-sm font-medium text-lime-500 rounded-full bg-blue-50 '>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='2'
-              stroke='currentColor'
-              className='w-6 h-6'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z'
-              />
-            </svg>
-          </p>
-          <h1 className='mt-3 text-2xl font-semibold text-gray-800  md:text-3xl'>
-            Something Went Wrong!
-          </h1>
-          <p className='mt-4 text-gray-500 '>Here are some helpful links:</p>
+    <section className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 min-h-screen flex items-center justify-center">
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="relative bg-white rounded-3xl shadow-2xl p-10 sm:p-16 max-w-lg w-full text-center flex flex-col items-center gap-6"
+      >
+        <motion.div
+          animate={{ y: [0, -15, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="text-6xl text-orange-500 mb-4"
+        >
+          ⚡
+        </motion.div>
 
-          <div className='flex items-center w-full mt-6 gap-x-3 shrink-0 sm:w-auto'>
-            <button
-              onClick={() => navigate(-1)}
-              className='flex items-center justify-center w-1/2 px-5 py-1 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto   hover:bg-gray-100 '
-            >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth='1.5'
-                stroke='currentColor'
-                className='w-5 h-5 rtl:rotate-180 text-lime-500'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18'
-                />
-              </svg>
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-pink-500 to-purple-500 animate-text">
+          Something Went Wrong!
+        </h1>
 
-              <span>Go back</span>
-            </button>
+        <p className="text-gray-600 text-lg sm:text-xl">
+          Oops! It seems like this page doesn’t exist or something went wrong.
+        </p>
 
-            <Button label={'Take Me Home'} onClick={() => navigate('/')} />
-          </div>
+        <div className="flex flex-col sm:flex-row gap-4 mt-4 w-full justify-center">
+          <motion.button
+            whileHover={{ scale: 1.05, rotate: 2 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => navigate(-1)}
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-white border border-orange-300 shadow-lg rounded-xl text-orange-600 font-semibold hover:bg-orange-50 transition-all duration-300"
+          >
+            <FaArrowLeft /> Go Back
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.05, rotate: -2 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => navigate("/")}
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-500 shadow-lg rounded-xl text-white font-semibold hover:brightness-105 transition-all duration-300"
+          >
+            <FaHome /> Take Me Home
+          </motion.button>
         </div>
-      </div>
-    </section>
-  )
-}
 
-export default ErrorPage
+        <motion.div
+          className="absolute -top-10 -left-10 w-24 h-24 rounded-full bg-pink-300 opacity-50 filter blur-2xl"
+          animate={{ x: [0, 20, 0], y: [0, 15, 0] }}
+          transition={{ duration: 3, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute -bottom-10 -right-10 w-32 h-32 rounded-full bg-purple-300 opacity-50 filter blur-3xl"
+          animate={{ x: [0, -20, 0], y: [0, -15, 0] }}
+          transition={{ duration: 4, repeat: Infinity }}
+        />
+      </motion.div>
+    </section>
+  );
+};
+
+export default ErrorPage;

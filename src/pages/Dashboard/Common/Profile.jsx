@@ -68,7 +68,7 @@ const Profile = () => {
     );
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50 p-4">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50 p-4 rounded-3xl">
       <motion.div
         className="bg-white shadow-2xl rounded-3xl md:w-4/5 lg:w-3/5 overflow-hidden relative"
         initial={{ opacity: 0, y: 30 }}

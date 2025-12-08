@@ -66,7 +66,7 @@ const Login = () => {
         variants={cardVariant}
       >
         <motion.h1
-          className="text-4xl font-extrabold text-center text-orange-600 mb-6"
+          className="text-4xl font-extrabold text-center bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 bg-clip-text text-transparent mb-6"
           initial={{ opacity: 0, y: -25 }}
           animate={{ opacity: 1, y: 0, transition: { duration: 0.5 } }}
         >
@@ -126,8 +126,8 @@ const Login = () => {
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             type="submit"
-            className="bg-orange-500 text-white w-full rounded-lg py-3 font-semibold text-lg 
-            shadow-lg hover:bg-orange-600 transition"
+            className="bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 text-white w-full rounded-lg py-3 font-semibold text-lg 
+            shadow-lg hover:from-orange-500 hover:via-red-600 hover:to-pink-600 transition"
           >
             {loading ? (
               <TbFidgetSpinner className="animate-spin m-auto" />
@@ -145,7 +145,7 @@ const Login = () => {
           Don't have an account?{" "}
           <Link
             to="/signup"
-            className="text-orange-700 font-semibold hover:underline"
+            className="text-orange-400 font-semibold hover:underline hover:text-orange-700"
           >
             Sign Up
           </Link>

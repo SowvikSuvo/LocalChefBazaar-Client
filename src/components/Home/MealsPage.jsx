@@ -22,13 +22,13 @@ const MealsPage = () => {
     loadMeals();
   }, [sortOrder]);
 
-  const handleDetails = (id) => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-    navigate(`/meal/${id}`);
-  };
+  // const handleDetails = (id) => {
+  //   if (!user) {
+  //     navigate("/login");
+  //     return;
+  //   }
+  //   navigate(`/meal/${id}`);
+  // };
 
   return (
     <div className="container mx-auto px-6 py-10 bg-orange-50 min-h-screen rounded-2xl">
@@ -107,14 +107,19 @@ const MealsPage = () => {
               </div>
 
               {/* BUTTON */}
-              <motion.div whileHover={{ scale: 1.05 }}>
-                <Link
-                  to={user ? `/meal/${meal._id}` : "/login"}
-                  className="mt-5 w-full py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500 transition block text-center"
-                >
-                  See Details
-                </Link>
-              </motion.div>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                onClick={() => {
+                  if (!user) {
+                    navigate("/login");
+                    return;
+                  }
+                  navigate(`/meal/${meal._id}`);
+                }}
+                className="mt-5 w-full py-2 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-500 transition"
+              >
+                See Details
+              </motion.button>
             </div>
           </motion.div>
         ))}
