@@ -17,7 +17,11 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  AreaChart,
+  Area,
+  CartesianGrid,
 } from "recharts";
+
 import LoadingSpinner from "../../Shared/LoadingSpinner";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
@@ -133,6 +137,112 @@ const AdminStatistics = () => {
           </div>
         </motion.div>
       </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        className="bg-white shadow-2xl rounded-3xl p-8 mt-12 border border-gray-100"
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h3 className="font-extrabold text-2xl text-gray-800">
+              Overall Statistics
+            </h3>
+            <p className="text-green-600 font-medium flex items-center gap-1 mt-1">
+              <span className="text-lg">▲</span> 8.6% increase from last week
+            </p>
+          </div>
+
+          <div className="relative">
+            <select className="bg-gray-100 px-4 py-2 rounded-lg text-sm font-medium cursor-pointer border-none outline-none hover:bg-gray-200 transition">
+              <option>This Week</option>
+              <option>Last Week</option>
+              <option>This Month</option>
+              <option>Last Month</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Chart */}
+        <ResponsiveContainer width="100%" height={300}>
+          <AreaChart
+            data={[
+              { day: "Mon", amount: totalPayments * 0.12 },
+              { day: "Tue", amount: totalPayments * 0.18 },
+              { day: "Wed", amount: totalPayments * 0.09 },
+              { day: "Thu", amount: totalPayments * 0.05 },
+              { day: "Fri", amount: totalPayments * 0.14 },
+              { day: "Sat", amount: totalPayments * 0.22 },
+              { day: "Sun", amount: totalPayments * 0.15 },
+            ]}
+            margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
+          >
+            {/* Animated Gradient */}
+            <defs>
+              <linearGradient id="premiumGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#bbf07d" stopOpacity={0.9}>
+                  <animate
+                    attributeName="stopColor"
+                    values="#bbf07d; #d4ffa2; #bbf07d"
+                    dur="6s"
+                    repeatCount="indefinite"
+                  />
+                </stop>
+                <stop offset="100%" stopColor="#d7ffb8" stopOpacity={0.15}>
+                  <animate
+                    attributeName="stopColor"
+                    values="#d7ffb8; #c6ff99; #d7ffb8"
+                    dur="6s"
+                    repeatCount="indefinite"
+                  />
+                </stop>
+              </linearGradient>
+            </defs>
+
+            {/* Axes */}
+            <XAxis
+              dataKey="day"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#7f8c8d", fontSize: 13 }}
+            />
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#7f8c8d", fontSize: 13 }}
+            />
+
+            {/* Tooltip */}
+            <Tooltip
+              contentStyle={{
+                background: "#fff",
+                borderRadius: "14px",
+                border: "1px solid #e7e7e7",
+                boxShadow: "0px 8px 25px rgba(0,0,0,0.08)",
+                padding: "10px 16px",
+              }}
+              formatter={(value) => [
+                `$${Math.round(value).toLocaleString()}`,
+                <span className="flex items-center gap-1">💰 Earnings</span>,
+              ]}
+            />
+
+            {/* Animated Line + Fill */}
+            <Area
+              type="monotone"
+              dataKey="amount"
+              stroke="#8CD83F"
+              strokeWidth={4}
+              fill="url(#premiumGradient)"
+              animationDuration={1200}
+              dot={{ r: 5, fill: "#8CD83F", strokeWidth: 2, stroke: "#fff" }}
+              activeDot={{ r: 8 }}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </motion.div>
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
