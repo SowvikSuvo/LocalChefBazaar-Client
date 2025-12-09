@@ -7,6 +7,7 @@ import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
+import LoadingSpinner from "../Shared/LoadingSpinner";
 
 const CreateMealFrom = () => {
   const [loading, setLoading] = useState(false);
@@ -74,24 +75,32 @@ const CreateMealFrom = () => {
     } catch (err) {
       console.error(err);
     } finally {
-      setLoading(false); // stop loader
+      setLoading(false);
     }
   };
 
+  if (loading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
   return (
-    <div className="py-12">
+    <div className="py-12 bg-gradient-to-br from-orange-50 via-pink-50 to-purple-100 rounded-2xl">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="p-6 max-w-2xl mx-auto bg-white shadow-xl rounded-2xl border border-orange-300"
       >
-        <h2 className="text-2xl font-bold text-orange-700 mb-6 text-center">
-          Create New Meal
-        </h2>
+        <motion.h2
+          initial={{ opacity: 0, y: -40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+          className="text-2xl font-bold text-orange-700 mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 drop-shadow-2xl"
+        >
+          Create a Delicious Meal
+        </motion.h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: -620 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="flex flex-col"
@@ -108,7 +117,7 @@ const CreateMealFrom = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: -600 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="flex flex-col"
@@ -183,7 +192,12 @@ const CreateMealFrom = () => {
             </motion.div>
           </div>
 
-          <div className="flex flex-col">
+          <motion.div
+            initial={{ opacity: 0, y: 500 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col"
+          >
             <label className="mb-1 font-medium text-orange-700">
               Ingredients
             </label>
@@ -192,10 +206,14 @@ const CreateMealFrom = () => {
               {...register("ingredients", { required: true })}
               className="w-full p-3 border rounded-lg border-orange-400 focus:ring-2 focus:ring-orange-300"
             />
-          </div>
+          </motion.div>
 
-          {/* ✅ Delivery Area Field */}
-          <div className="flex flex-col md:col-span-2">
+          <motion.div
+            initial={{ opacity: 0, y: 500 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col md:col-span-2"
+          >
             <label className="mb-1 font-medium text-orange-700">
               Delivery Area
             </label>
@@ -205,9 +223,14 @@ const CreateMealFrom = () => {
               {...register("deliveryArea", { required: true })}
               className="p-3 border rounded-lg border-orange-400"
             />
-          </div>
+          </motion.div>
 
-          <div className="flex flex-col">
+          <motion.div
+            initial={{ opacity: 0, y: 500 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col"
+          >
             <label className="mb-1 font-medium text-orange-700">
               Estimated Delivery Time
             </label>
@@ -217,9 +240,14 @@ const CreateMealFrom = () => {
               {...register("estimatedDeliveryTime", { required: true })}
               className="w-full p-3 border rounded-lg border-orange-400 focus:ring-2 focus:ring-orange-300"
             />
-          </div>
+          </motion.div>
 
-          <div className="flex flex-col">
+          <motion.div
+            initial={{ opacity: 0, y: 500 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col"
+          >
             <label className="mb-1 font-medium text-orange-700">
               Chef Experience
             </label>
@@ -228,9 +256,14 @@ const CreateMealFrom = () => {
               {...register("chefExperience", { required: true })}
               className="w-full p-3 border rounded-lg border-orange-400 focus:ring-2 focus:ring-orange-300"
             />
-          </div>
+          </motion.div>
 
-          <div className="flex flex-col">
+          <motion.div
+            initial={{ opacity: 0, y: 500 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col"
+          >
             <label className="mb-1 font-medium text-orange-700">
               User Email
             </label>
@@ -241,13 +274,13 @@ const CreateMealFrom = () => {
               readOnly
               className="w-full p-3 border rounded-lg bg-orange-100 border-orange-400"
             />
-          </div>
+          </motion.div>
 
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             type="submit"
-            className="w-full py-3 bg-orange-600 text-white rounded-lg shadow-md hover:bg-orange-500 transition-all"
+            className="w-full py-3  bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 drop-shadow-2xl text-white rounded-lg shadow-md hover:bg-orange-500 transition-all"
           >
             Create Meal
           </motion.button>

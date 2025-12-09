@@ -15,6 +15,7 @@ import {
 
 import OrderModal from "../../components/Modal/OrderModal";
 import MealsDetailsWithReviews from "./MealsDetailsWithReviews";
+import LoadingSpinner from "../../components/Shared/LoadingSpinner";
 
 const MealsDetails = () => {
   const { id } = useParams();
@@ -40,16 +41,11 @@ const MealsDetails = () => {
     } else {
       fetchMeal();
     }
-  }, [id, user]);
+  }, [id, user, axiosSecure, navigate]);
 
   const closeModal = () => setIsOpen(false);
 
-  if (!meal)
-    return (
-      <div className="text-center mt-20 text-orange-600 font-bold text-xl">
-        Loading...
-      </div>
-    );
+  if (!meal) return <LoadingSpinner></LoadingSpinner>;
 
   return (
     <Container>
@@ -138,7 +134,7 @@ const MealsDetails = () => {
           {/* ORDER BUTTON (MODAL) */}
           <motion.button
             whileHover={{ scale: 1.03 }}
-            className="mt-8 w-full bg-orange-500 text-white py-3 rounded-lg"
+            className="mt-8 w-full bg-gradient-to-r from-orange-500 via-red-500 to-pink-600bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 text-white py-3 rounded-lg"
             onClick={() => setIsOpen(true)}
           >
             Order Now

@@ -38,7 +38,7 @@ const ReviewsSection = () => {
 
   return (
     <section className="bg-gradient-to-r from-purple-50 via-pink-50 to-orange-50 py-20 rounded-3xl shadow-lg">
-      <h2 className="text-4xl font-extrabold text-gray-800 mb-12 text-center">
+      <h2 className="text-4xl font-extrabold bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 bg-clip-text text-transparent mb-12 text-center">
         What Our Customers Say
       </h2>
 

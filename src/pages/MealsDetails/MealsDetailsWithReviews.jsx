@@ -5,6 +5,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
 import { Star, Heart } from "lucide-react";
 import Swal from "sweetalert2";
+import LoadingSpinner from "../../components/Shared/LoadingSpinner";
 
 const MealsDetailsWithReviews = () => {
   const { id } = useParams();
@@ -103,8 +104,7 @@ const MealsDetailsWithReviews = () => {
     }
   };
 
-  if (!meal)
-    return <p className="text-center py-10">Loading meal details...</p>;
+  if (!meal) return <LoadingSpinner></LoadingSpinner>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">

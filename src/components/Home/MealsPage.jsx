@@ -20,15 +20,7 @@ const MealsPage = () => {
 
   useEffect(() => {
     loadMeals();
-  }, [sortOrder]);
-
-  // const handleDetails = (id) => {
-  //   if (!user) {
-  //     navigate("/login");
-  //     return;
-  //   }
-  //   navigate(`/meal/${id}`);
-  // };
+  }, [sortOrder, loadMeals]);
 
   return (
     <div className="container mx-auto px-6 py-10 bg-orange-50 min-h-screen rounded-2xl">

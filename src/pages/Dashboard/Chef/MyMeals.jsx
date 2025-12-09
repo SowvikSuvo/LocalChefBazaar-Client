@@ -49,7 +49,7 @@ const MyMeals = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-pink-50 to-purple-100 rounded-2xl">
+    <div className=" bg-gradient-to-br from-orange-50 via-pink-50 to-purple-100 rounded-2xl">
       {/* Glassy Background Overlay */}
       <div className="fixed inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 via-pink-500/20 to-purple-600/20 blur-3xl" />

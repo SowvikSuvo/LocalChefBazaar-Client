@@ -14,6 +14,10 @@ import {
   XCircle,
   CheckCircle2,
   Truck,
+  Package2,
+  PackageCheckIcon,
+  PackageSearchIcon,
+  Package,
 } from "lucide-react";
 
 const OrderRequests = () => {
@@ -61,15 +65,22 @@ const OrderRequests = () => {
 
   if (authLoading || loading) return <LoadingSpinner></LoadingSpinner>;
 
-  if (!orders.length)
-    return <p className="text-center mt-20 text-lg">No orders found.</p>;
-
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6  bg-gradient-to-br from-orange-50 via-pink-50 to-purple-100 rounded-2xl">
       {" "}
-      <h1 className="text-4xl font-extrabold mb-8 text-center text-gradient bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-        Order Requests
-      </h1>{" "}
+      <motion.div
+        initial={{ opacity: 0, y: -40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+        className="text-center mb-12 "
+      >
+        <h1 className="text-4xl md:text-3xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 drop-shadow-2xl ">
+          Order Requests
+        </h1>
+        <p className="mt-3 text-lg text-gray-600 font-medium">
+          Made with care • Served with perfection
+        </p>
+      </motion.div>{" "}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {orders.map((order) => {
           const { orderStatus } = order;
@@ -205,6 +216,22 @@ const OrderRequests = () => {
           );
         })}
       </div>
+      {orders.length === 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center py-20"
+        >
+          <PackageSearchIcon className="w-24 h-24 mx-auto text-gray-300 mb-6" />
+          <p className="text-xl text-gray-500 font-medium">
+            You haven't received any order requests yet
+          </p>
+          <p className="text-gray-400 mt-2">
+            Start building your irresistible menu! <br /> Hungry customers will
+            show up soon!
+          </p>
+        </motion.div>
+      )}
     </div>
   );
 };

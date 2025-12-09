@@ -75,7 +75,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-100 to-orange-200 flex justify-center items-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-orange-100 to-orange-200 flex justify-center items-center px-4 rounded-2xl">
       <motion.div
         initial={{ opacity: 0, scale: 0.8, y: 50 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}

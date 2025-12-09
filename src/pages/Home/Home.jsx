@@ -110,7 +110,7 @@ const HomePage = () => {
             <motion.div whileHover={{ scale: 1.05 }}>
               <Link
                 to="/meals"
-                className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold px-8 py-3 rounded-full shadow-lg flex items-center gap-2 transition-colors"
+                className="bg-[#fe5301] hover:bg-yellow-600 text-gray-900 font-bold px-8 py-3 rounded-full shadow-lg flex items-center gap-2 transition-colors"
               >
                 Order Now <FaArrowRight />
               </Link>

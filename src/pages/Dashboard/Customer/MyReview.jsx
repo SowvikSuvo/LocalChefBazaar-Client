@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Swal from "sweetalert2";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 
 const MyReview = () => {
   const { user } = useAuth();
@@ -82,12 +83,7 @@ const MyReview = () => {
     }
   };
 
-  if (loading)
-    return (
-      <p className="text-center text-xl font-medium p-10 animate-pulse">
-        Loading reviews...{" "}
-      </p>
-    );
+  if (loading) return <LoadingSpinner></LoadingSpinner>;
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
