@@ -38,10 +38,10 @@ const ManageRequest = () => {
   };
 
   return (
-    <div className="my-5 p-5">
+    <div className="my-5 p-4 sm:p-5">
       {/* Title */}
       <motion.h1
-        className="text-4xl font-extrabold mb-10 text-center bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-red-500 to-pink-500"
+        className="text-3xl sm:text-4xl font-extrabold mb-8 sm:mb-10 text-center bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-red-500 to-pink-500"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -56,16 +56,16 @@ const ManageRequest = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
-        <table className="table w-full">
+        <table className="table w-full min-w-[600px] sm:min-w-full">
           <thead className="bg-gradient-to-r from-orange-500 to-red-500 text-white">
             <tr>
-              <th>SL</th>
-              <th>User Name</th>
-              <th>Email</th>
-              <th>Type</th>
-              <th>Status</th>
-              <th>Request Time</th>
-              <th>Actions</th>
+              <th className="text-sm sm:text-base">SL</th>
+              <th className="text-sm sm:text-base">User Name</th>
+              <th className="text-sm sm:text-base">Email</th>
+              <th className="text-sm sm:text-base">Type</th>
+              <th className="text-sm sm:text-base">Status</th>
+              <th className="text-sm sm:text-base">Request Time</th>
+              <th className="text-sm sm:text-base">Actions</th>
             </tr>
           </thead>
 
@@ -78,17 +78,19 @@ const ManageRequest = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
               >
-                <td className="font-semibold">{i + 1}</td>
-                <td className="font-medium">{req.userName}</td>
-                <td>{req.userEmail}</td>
+                <td className="font-semibold text-sm sm:text-base">{i + 1}</td>
+                <td className="font-medium text-sm sm:text-base">
+                  {req.userName}
+                </td>
+                <td className="text-sm sm:text-base">{req.userEmail}</td>
                 <td>
-                  <span className="px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-700">
+                  <span className="px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold bg-blue-100 text-blue-700">
                     {req.requestType}
                   </span>
                 </td>
                 <td>
                   <span
-                    className={`px-3 py-1 rounded-full text-sm font-semibold capitalize ${
+                    className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold capitalize ${
                       req.requestStatus === "pending"
                         ? "bg-yellow-100 text-yellow-800 animate-pulse"
                         : req.requestStatus === "accepted"
@@ -99,8 +101,10 @@ const ManageRequest = () => {
                     {req.requestStatus}
                   </span>
                 </td>
-                <td>{new Date(req.requestTime).toLocaleString()}</td>
-                <td>
+                <td className="text-xs sm:text-sm">
+                  {new Date(req.requestTime).toLocaleString()}
+                </td>
+                <td className="flex flex-col sm:flex-row gap-2 sm:gap-2">
                   <motion.button
                     whileHover={{
                       scale: req.requestStatus === "pending" ? 1.05 : 1,
@@ -108,7 +112,7 @@ const ManageRequest = () => {
                     whileTap={{
                       scale: req.requestStatus === "pending" ? 0.95 : 1,
                     }}
-                    className="btn btn-success btn-sm mr-2 text-white font-semibold shadow-md"
+                    className="btn btn-success btn-xs sm:btn-sm text-white font-semibold shadow-md"
                     disabled={req.requestStatus !== "pending"}
                     onClick={() => handleAction(req, "accept")}
                   >
@@ -122,7 +126,7 @@ const ManageRequest = () => {
                     whileTap={{
                       scale: req.requestStatus === "pending" ? 0.95 : 1,
                     }}
-                    className="btn btn-error btn-sm text-white font-semibold shadow-md"
+                    className="btn btn-error btn-xs sm:btn-sm text-white font-semibold shadow-md"
                     disabled={req.requestStatus !== "pending"}
                     onClick={() => handleAction(req, "reject")}
                   >

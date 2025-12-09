@@ -47,7 +47,6 @@ const Sidebar = () => {
         </button>
       </div>
 
-      {/* Sidebar */}
       <motion.div
         initial={{ x: -300 }}
         animate={{ x: isActive ? -300 : 0 }}
@@ -85,7 +84,7 @@ const Sidebar = () => {
                   <FaHome className="transition-transform duration-300 group-hover:scale-110 text-orange-500" />
                   Home Page
                 </span>
-                <span className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 to-red-500 opacity-0 group-hover:opacity-20 rounded-lg transition-opacity duration-300"></span>
+                <span className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 to-red-500 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></span>
               </Link>
 
               {/* Role-Based Menus */}
