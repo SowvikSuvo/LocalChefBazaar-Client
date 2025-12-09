@@ -46,7 +46,7 @@ const CreateMealFrom = () => {
 
   const onSubmit = async (data) => {
     try {
-      setLoading(true); // start loader
+      setLoading(true);
 
       const imgURL = await uploadImageBB();
 
@@ -80,8 +80,45 @@ const CreateMealFrom = () => {
   };
 
   if (loading) {
-    return <LoadingSpinner></LoadingSpinner>;
+    return (
+      <div className="flex flex-col items-center justify-center  bg-orange-50 rounded-lg shadow-md p-6 animate-pulse">
+        <LoadingSpinner className="w-16 h-16  " />
+
+        <motion.h2
+          className="text-2xl font-bold bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 bg-clip-text text-transparent mb-2 text-center drop-shadow-lg"
+          animate={{ y: [0, -10, 0] }}
+          transition={{ repeat: Infinity, duration: 0.8 }}
+        >
+          Uploading Your Image
+        </motion.h2>
+
+        <motion.p
+          className="bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 bg-clip-text text-transparent text-center text-sm mb-4"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ repeat: Infinity, duration: 1 }}
+        >
+          Please wait a moment while we process your meal image...
+        </motion.p>
+
+        <div className="flex space-x-2 justify-center">
+          {[...Array(3)].map((_, i) => (
+            <motion.span
+              key={i}
+              className="w-3 h-3 bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 rounded-full shadow-lg"
+              animate={{ y: [0, -15, 0], scale: [1, 1.5, 1] }}
+              transition={{
+                repeat: Infinity,
+                duration: 0.6,
+                delay: i * 0.2,
+                ease: "easeInOut",
+              }}
+            ></motion.span>
+          ))}
+        </div>
+      </div>
+    );
   }
+
   return (
     <div className="py-12 bg-gradient-to-br from-orange-50 via-pink-50 to-purple-100 rounded-2xl">
       <motion.div

@@ -5,7 +5,7 @@ const LoadingSpinner = ({ smallHeight }) => {
     <div
       className={`${
         smallHeight ? "h-[250px]" : "h-[70vh]"
-      } flex justify-center items-center`}
+      } flex justify-center items-center `}
     >
       <RingLoader size={90} color="orange" speedMultiplier={1} />
     </div>

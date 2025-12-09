@@ -2,11 +2,10 @@ import { useState } from "react";
 import { Link } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import logo from "../../../assets/images/logo2.png";
-// Icons
+import { motion } from "framer-motion";
 import { GrLogout } from "react-icons/gr";
 import { FcSettings } from "react-icons/fc";
 import { AiOutlineBars } from "react-icons/ai";
-import { BsGraphUp } from "react-icons/bs";
 
 // User Menu
 import MenuItem from "./Menu/MenuItem";
@@ -31,7 +30,7 @@ const Sidebar = () => {
   return (
     <>
       {/* Small Screen Navbar, only visible till md breakpoint */}
-      <div className="bg-gray-100 text-gray-800 flex justify-between md:hidden sticky top-0 z-50 shadow-md">
+      <div className="bg-gradient-to-b from-orange-100 via-orange-200 to-orange-300 shadow-xl text-gray-800 flex justify-between md:hidden sticky top-0 z-50 shadow-md rounded">
         <div>
           <div className="block cursor-pointer p-4 font-bold">
             <Link to="/">
@@ -49,36 +48,47 @@ const Sidebar = () => {
       </div>
 
       {/* Sidebar */}
-      <div
-        className={`z-10 md:fixed flex  flex-col justify-between overflow-x-hidden bg-gray-100 w-64 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform ${
+      <motion.div
+        initial={{ x: -300 }}
+        animate={{ x: isActive ? -300 : 0 }}
+        transition={{ type: "spring", stiffness: 120 }}
+        className={`z-10 md:fixed flex flex-col justify-between overflow-x-hidden w-64 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform ${
           isActive && "-translate-x-full"
-        }  md:translate-x-0  transition duration-200 ease-in-out`}
+        } md:translate-x-0 transition duration-300 ease-in-out bg-gradient-to-b from-orange-100 via-orange-200 to-orange-300 shadow-xl rounded-r-3xl`}
       >
         <div className="flex flex-col h-full">
           {/* Top Content */}
           <div>
             {/* Logo */}
-            <div className="w-full hidden md:flex px-4 py-2 shadow-lg rounded-lg justify-center items-center bg-lime-100 mx-auto">
+            <div className="w-full hidden md:flex px-4 py-2 shadow-lg rounded-full justify-center items-center bg-orange-200 mx-auto transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:bg-orange-300">
               <Link to="/">
-                <img src={logo} alt="logo" width="100" height="100" />
+                <img
+                  src={logo}
+                  alt="logo"
+                  width="100"
+                  height="100"
+                  className="rounded"
+                />
               </Link>
             </div>
           </div>
 
           {/* Middle Content */}
           <div className="flex flex-col justify-between flex-1 mt-6">
-            {/*  Menu Items */}
             <nav>
-              {/* Role-Based Menu */}
+              {/* Home Link */}
               <Link
                 to="/"
-                className="flex items-center px-4 py-2 mt-10 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform rounded-lg"
+                className="flex items-center px-4 py-2 mt-10 text-gray-700 font-semibold rounded-lg relative overflow-hidden group transition-all duration-300 hover:text-white"
               >
-                <span className="flex items-center gap-5 font-semibold">
-                  <FaHome></FaHome> Home Page
+                <span className="flex items-center gap-5 z-10">
+                  <FaHome className="transition-transform duration-300 group-hover:scale-110 text-orange-500" />
+                  Home Page
                 </span>
+                <span className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 to-red-500 opacity-0 group-hover:opacity-20 rounded-lg transition-opacity duration-300"></span>
               </Link>
 
+              {/* Role-Based Menus */}
               {role === "user" && <CustomerMenu />}
               {role === "chef" && <ChefMenu />}
               {role === "admin" && <AdminMenu />}
@@ -87,20 +97,25 @@ const Sidebar = () => {
 
           {/* Bottom Content */}
           <div>
-            <hr />
+            <hr className="border-gray-300 my-4" />
 
-            <MenuItem icon={FcSettings} label="Profile" address="/dashboard" />
+            <MenuItem
+              icon={FcSettings}
+              label="Profile"
+              address="/dashboard"
+              className="relative flex items-center px-4 py-2 mb-3 rounded-lg font-semibold text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-orange-400 hover:via-pink-500 hover:to-red-500 transition-all duration-300"
+            />
             <button
               onClick={logOut}
-              className="flex cursor-pointer w-full items-center px-4 py-2 mt-5 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform"
+              className="flex cursor-pointer w-full items-center px-4 py-2 mt-2 text-gray-700 font-medium rounded-lg relative overflow-hidden group transition-all duration-300 hover:text-white hover:bg-gradient-to-r hover:from-orange-400 hover:via-pink-500 hover:to-red-500"
             >
-              <GrLogout className="w-5 h-5" />
-
-              <span className="mx-4 font-medium">Logout</span>
+              <GrLogout className="w-5 h-5 z-10 transition-transform duration-300 group-hover:rotate-12" />
+              <span className="mx-4 font-medium z-10">Logout</span>
+              <span className="absolute inset-0 bg-gradient-to-r from-orange-400 via-pink-500 to-red-500 opacity-0 group-hover:opacity-20 rounded-lg transition-opacity duration-300"></span>
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };

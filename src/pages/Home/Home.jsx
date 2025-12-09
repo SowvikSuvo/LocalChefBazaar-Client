@@ -11,6 +11,9 @@ import Container from "../../components/Shared/Container";
 import { ChefHat, MapPin, Star, DollarSign } from "lucide-react";
 import { Typewriter } from "react-simple-typewriter";
 import useAuth from "../../hooks/useAuth";
+import FeaturesSection from "../../components/Home/FeatureRandom";
+import HeroChefSection from "./HeroChefSection";
+import NewsletterSection from "./NewsletterSection";
 
 const heroImages = [
   "/image9.jpg",
@@ -196,7 +199,9 @@ const HomePage = () => {
         </section>
 
         {/* Customer Reviews */}
+        <FeaturesSection></FeaturesSection>
         <ReviewsSection />
+        <HeroChefSection></HeroChefSection>
 
         {/* Extra Section */}
         <section className="container mx-auto px-10 py-16 flex flex-col md:flex-row items-center justify-between bg-gradient-to-r from-pink-100 via-orange-100 to-yellow-100 rounded-3xl shadow-lg">
@@ -232,6 +237,7 @@ const HomePage = () => {
             <FaLeaf className="text-green-500 text-9xl animate-bounce" />
           </motion.div>
         </section>
+        <NewsletterSection></NewsletterSection>
       </div>
     </Container>
   );

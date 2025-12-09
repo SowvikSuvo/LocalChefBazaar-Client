@@ -1,6 +1,7 @@
 import { Outlet } from "react-router";
 import Sidebar from "../components/Dashboard/Sidebar/Sidebar";
 import Footer from "../components/Shared/Footer/Footer";
+import BackToTop from "../components/Shared/Button/BackToTop";
 
 const DashboardLayout = () => {
   return (
@@ -18,6 +19,7 @@ const DashboardLayout = () => {
         <footer className="mt-auto">
           <Footer />
         </footer>
+        <BackToTop></BackToTop>
       </div>
     </div>
   );
