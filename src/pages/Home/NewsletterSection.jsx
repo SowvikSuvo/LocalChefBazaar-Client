@@ -23,7 +23,7 @@ const NewsletterSection = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1 }}
         >
-          Stay Updated with LocalChefBazaar!
+          Stay Updated with Local Chef Bazaar!
         </motion.h2>
 
         <motion.p

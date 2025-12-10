@@ -2,31 +2,33 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import { motion } from "framer-motion";
-import { ChefHat, MapPin, Star, DollarSign } from "lucide-react";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
-import PremiumPagination from "./PremiumPagination ";
+import { ChefHat, MapPin, Star, DollarSign, Search } from "lucide-react";
+
 import LoadingSpinner from "../Shared/LoadingSpinner";
 import Container from "../Shared/Container";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import PremiumPagination from "./PremiumPagination ";
 
 const MealsPage = () => {
   const axiosSecure = useAxiosSecure();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [meals, setMeals] = useState([]);
   const [sortOrder, setSortOrder] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
   const [totalMeals, setTotalMeals] = useState(0);
+  const itemsPerPage = 10;
   const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
-  const navigate = useNavigate();
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
 
   const loadMeals = async () => {
     try {
       setLoading(true);
-
       const url = sortOrder
         ? `/meals?sortBy=price&sort=${sortOrder}&page=${currentPage}&limit=${itemsPerPage}`
         : `/meals?page=${currentPage}&limit=${itemsPerPage}`;
-
       const res = await axiosSecure.get(url);
       setMeals(res.data.data);
       setTotalMeals(res.data.total);
@@ -38,17 +40,44 @@ const MealsPage = () => {
     }
   };
 
+  const searchMeals = async (text) => {
+    if (!text.trim()) {
+      setIsSearching(false);
+      loadMeals();
+      return;
+    }
+
+    try {
+      setSearchLoading(true);
+      setIsSearching(true);
+
+      const res = await axiosSecure.get(`/search-meals?query=${text}`);
+      setMeals(res.data.data);
+      setTotalMeals(res.data.data.length);
+    } catch (err) {
+      console.error("Search failed:", err);
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
   useEffect(() => {
-    loadMeals();
+    if (!isSearching) loadMeals();
   }, [sortOrder, currentPage]);
 
-  if (loading) {
-    return <LoadingSpinner></LoadingSpinner>;
-  }
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      searchMeals(searchText);
+    }, 400); // 400ms debounce
+    return () => clearTimeout(delay);
+  }, [searchText]);
+
+  if (loading && !isSearching) return <LoadingSpinner />;
 
   return (
     <Container>
       <div className="container mx-auto px-6 py-10 bg-orange-50 min-h-screen rounded-2xl">
+        {/* Title */}
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -58,23 +87,48 @@ const MealsPage = () => {
           Daily Meals
         </motion.h1>
 
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-          className="px-6 py-3 flex items-center gap-2 bg-orange-600 text-white rounded-xl shadow-md hover:bg-orange-500 mx-auto mb-10"
-        >
-          <DollarSign size={20} />
-          Sort by Price:{" "}
-          <span className="font-bold">
-            {sortOrder === "asc"
-              ? "Low → High"
-              : sortOrder === "desc"
-              ? "High → Low"
-              : "Click"}
-          </span>
-        </motion.button>
+        <div className="flex justify-center mb-4">
+          <div className="relative w-full max-w-lg">
+            <Search
+              className="absolute left-3 top-3 text-orange-600"
+              size={20}
+            />
+            <input
+              type="text"
+              placeholder="Search meals by name..."
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 rounded-xl bg-white shadow border border-orange-200 focus:ring-2 focus:ring-orange-400 outline-none"
+            />
+          </div>
+        </div>
 
+        {searchLoading && (
+          <p className="text-center text-orange-600 font-medium mb-4 animate-pulse">
+            Searching...
+          </p>
+        )}
+
+        {!isSearching && (
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+            className="px-6 py-3 flex items-center gap-2 bg-orange-600 text-white rounded-xl shadow-md hover:bg-orange-500 mx-auto mb-10"
+          >
+            <DollarSign size={20} />
+            Sort by Price:{" "}
+            <span className="font-bold">
+              {sortOrder === "asc"
+                ? "Low → High"
+                : sortOrder === "desc"
+                ? "High → Low"
+                : "Click"}
+            </span>
+          </motion.button>
+        )}
+
+        {/* Meals Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {meals.map((meal) => (
             <motion.div
@@ -110,7 +164,6 @@ const MealsPage = () => {
                     <DollarSign size={18} />
                     <span className="font-bold text-lg">{meal.price}</span>
                   </div>
-
                   <div className="flex items-center gap-1 text-yellow-500">
                     <Star size={18} fill="gold" />
                     <span className="font-medium">{meal.rating}</span>
@@ -135,12 +188,15 @@ const MealsPage = () => {
           ))}
         </div>
 
-        <PremiumPagination
-          totalMeals={totalMeals}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          itemsPerPage={itemsPerPage}
-        />
+        {/* Pagination only when not searching */}
+        {!isSearching && (
+          <PremiumPagination
+            totalMeals={totalMeals}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            itemsPerPage={itemsPerPage}
+          />
+        )}
       </div>
     </Container>
   );
