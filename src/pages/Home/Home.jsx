@@ -17,15 +17,17 @@ import NewsletterSection from "./NewsletterSection";
 
 const heroImages = [
   "/image9.jpg",
-  "/image3.jpg",
+  "/image3.jpeg",
+  "/image13.jpeg",
   "/image1.jpg",
   "/image10.jpg",
   "/image4.jpg",
   "/image5.jpg",
+  "/image12.jpeg",
   "/image11.jpg",
   "/image6.jpg",
   "/image2.jpg",
-  "/image8.jpg",
+  "/image8.jpeg",
 ];
 
 const heroSliderSettings = {
@@ -113,7 +115,7 @@ const HomePage = () => {
             <motion.div whileHover={{ scale: 1.05 }}>
               <Link
                 to="/meals"
-                className="bg-[#fe5301] hover:bg-yellow-600 text-gray-900 font-bold px-8 py-3 rounded-full shadow-lg flex items-center gap-2 transition-colors"
+                className="bg-[#fe5301] hover:bg-orange-500 text-black hover:text-white font-bold px-8 py-3 rounded-full shadow-lg flex items-center gap-2 transition-colors"
               >
                 Order Now <FaArrowRight />
               </Link>
@@ -123,7 +125,7 @@ const HomePage = () => {
 
         {/* Daily Meals Section */}
         <section className="container mx-auto px-4 py-16">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 bg-clip-text text-transparent">
+          <h2 className="text-4xl font-bold text-gray-800 mb-6 text-center bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 bg-clip-text text-transparent">
             Latest Daily Meals
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
