@@ -22,6 +22,8 @@ import OrderPage from "../components/Modal/OrderModal";
 import PaymentSuccess from "../pages/Payment/PaymentSuccess";
 import UpdateMeals from "../components/Form/UpdateMeals";
 import OrderRequests from "../pages/Dashboard/Chef/OrderRequests";
+import AboutUs from "../pages/AboutUs/AboutUs";
+import ContactPage from "../pages/ContactPage/ContactPage";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +38,14 @@ export const router = createBrowserRouter([
       {
         path: "/meals",
         element: <Meals></Meals>,
+      },
+      {
+        path: "/about-us",
+        element: <AboutUs></AboutUs>,
+      },
+      {
+        path: "/contact",
+        element: <ContactPage></ContactPage>,
       },
       {
         path: "/meal/:id",

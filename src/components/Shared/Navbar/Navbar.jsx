@@ -36,6 +36,12 @@ const Navbar = () => {
                   Dashboard
                 </Link>
               )}
+              <Link to="/about-us" className="hover:text-orange-600 transition">
+                About Us
+              </Link>
+              <Link to="/contact" className="hover:text-orange-600 transition">
+                Contact
+              </Link>
             </div>
 
             {/* Authentication Buttons */}
@@ -112,6 +118,20 @@ const Navbar = () => {
                         Dashboard
                       </Link>
                     )}
+                    <Link
+                      to="/about-us"
+                      className="px-4 py-3 hover:bg-orange-100 transition font-semibold"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      About Us
+                    </Link>
+                    <Link
+                      to="/contact"
+                      className="px-4 py-3 hover:bg-orange-100 transition font-semibold"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Contact
+                    </Link>
 
                     {user ? (
                       <div

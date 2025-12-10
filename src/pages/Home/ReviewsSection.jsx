@@ -55,6 +55,9 @@ const ReviewsSection = () => {
                 h-[200px] sm:h-[200px] md:h-[240px] lg:h-[260px] border border-gray-100 
                 hover:shadow-purple-400 transition-all duration-300"
               >
+                <h2 className="text-xl font-bold mb-2 text-orange-700">
+                  {review.mealName}
+                </h2>
                 {/* Comment */}
                 <p
                   className="text-gray-700 text-lg mb-6 italic overflow-hidden overflow-ellipsis 

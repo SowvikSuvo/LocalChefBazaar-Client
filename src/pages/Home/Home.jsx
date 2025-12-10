@@ -57,9 +57,9 @@ const HomePage = () => {
 
   return (
     <Container>
-      <div className="space-y-20">
+      <div className="space-y-18 ">
         {/* Hero Section */}
-        <motion.section className="relative h-[60vh] flex flex-col justify-center items-center text-center px-4 overflow-hidden rounded-2xl">
+        <motion.section className="relative h-[60vh] flex flex-col justify-center items-center text-center px-6 overflow-hidden rounded-2xl mt-4">
           {/* Hero Image Slider */}
           <div className="absolute top-0 left-0 w-full h-full -z-10">
             <Slider {...heroSliderSettings}>
@@ -124,7 +124,7 @@ const HomePage = () => {
         </motion.section>
 
         {/* Daily Meals Section */}
-        <section className="container mx-auto px-4 py-16">
+        <section className="container mx-auto px-4 ">
           <h2 className="text-4xl font-bold text-gray-800 mb-6 text-center bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 bg-clip-text text-transparent">
             Latest Daily Meals
           </h2>
